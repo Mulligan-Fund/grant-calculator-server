@@ -21,7 +21,7 @@ app.use(sessions({ secret: 'wowfoundations'
 					    , httpOnly: false } } ));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors({credentials: true, origin: 'http://127.0.0.1:4000'}));
+app.use(cors({credentials: true, origin: ['http://127.0.0.1:4000','https://mulligan-fund.github.io/']}));
 app.use(methodOverride());
 
 // Mongoose
