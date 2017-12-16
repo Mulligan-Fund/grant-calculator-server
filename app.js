@@ -24,6 +24,8 @@ app.use(passport.session());
 app.use(cors({credentials: true, origin: ['http://127.0.0.1:4000','https://mulligan-fund.github.io/']}));
 app.use(methodOverride());
 
+
+
 // Mongoose
 var schema = require('./schema.js');
 var User = require('./user.js');
@@ -111,7 +113,7 @@ function ensureAuthenticated(req, res, next) {
 //   }
 // }
 
-app.options('*', cors()); // Setup CORS option
+app.options('*', cors({credentials: true, origin: ['http://127.0.0.1:4000','https://mulligan-fund.github.io/']})); // Setup CORS option
 
 app.get('/', function(req,res) {
 	res.setHeader('Content-Type', 'application/json');	
