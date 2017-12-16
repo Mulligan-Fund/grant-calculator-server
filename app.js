@@ -36,6 +36,7 @@ app.use(passport.session());
 app.use(cors({
 	credentials: true
 	, preflightContinue: true
+	, allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept"
 	, origin: ['http://127.0.0.1:4000','https://mulligan-fund.github.io/']
 	}));
 app.use(methodOverride());
