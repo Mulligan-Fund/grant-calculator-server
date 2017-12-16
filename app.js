@@ -12,6 +12,9 @@ var express = require('express')
     , mongoose = require('mongoose')
     , cors = require('cors');
 
+
+var heroku = process.env.HEROKU_TRUE || false
+
 app.set('view engine', 'jade');
 
 app.use(function(req, res, next) {
@@ -32,8 +35,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors({credentials: true, origin: ['http://127.0.0.1:4000','https://mulligan-fund.github.io/']}));
 app.use(methodOverride());
-
-var heroku = process.env.HEROKU_TRUE || false
 
 // Mongoose
 var schema = require('./schema.js');
