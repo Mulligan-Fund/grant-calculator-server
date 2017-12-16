@@ -1,0 +1,32 @@
+{
+  "name": "grantcalc",
+  "version": "1.0.0",
+  "description": "Calculating Grants",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mulligan-fund/grant-calculator.git"
+  },
+  "author": "readywater",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mulligan-fund/grant-calculator/issues"
+  },
+  "homepage": "https://github.com/mulligan-fund/grant-calculator#readme",
+  "dependencies": {
+    "body-parser": "^1.0.2",
+    "connect": "^3.4.1",
+    "cors": "^2.8.4",
+    "express": "^4.14.0",
+    "express-session": "^1.14.0",
+    "jade": "*",
+    "method-override": "^1.0.0",
+    "mongoose": "^4.10.8",
+    "morgan": "^1.0.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
+  }
+}
