@@ -113,7 +113,14 @@ function ensureAuthenticated(req, res, next) {
 //   }
 // }
 
-app.options('*', cors({credentials: true, origin: ['http://127.0.0.1:4000','https://mulligan-fund.github.io/']})); // Setup CORS option
+app.options('*', cors({credentials: true, origin: ['http://127.0.0.1:4000','https://mulligan-fund.github.io']})); // Setup CORS option
+app.options('*', function (req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader('Access-Control-Allow-Methods', '*');
+  res.setHeader("Access-Control-Allow-Headers", "*");
+});
+
+
 
 app.get('/', function(req,res) {
 	res.setHeader('Content-Type', 'application/json');	
