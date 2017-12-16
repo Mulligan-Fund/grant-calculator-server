@@ -111,7 +111,7 @@ function ensureAuthenticated(req, res, next) {
 //   }
 // }
 
-// app.options('*', cors()); // Setup CORS option
+app.options('*', cors()); // Setup CORS option
 
 app.get('/', function(req,res) {
 	res.setHeader('Content-Type', 'application/json');	
