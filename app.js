@@ -27,7 +27,7 @@ app.use(methodOverride());
 // Mongoose
 var schema = require('./schema.js');
 var User = require('./user.js');
-mongoose.connect('mongodb://localhost/grantcalc'); //process.env.MONGODB_URI || 
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/grantcalc'); //process.env.MONGODB_URI || 
 
 passport.serializeUser(function(user, done) {
 	console.log("serializeUser")
