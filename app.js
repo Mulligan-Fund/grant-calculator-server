@@ -78,7 +78,6 @@ passport.use(new LocalStrategy({
 			           done(null,user)
 			     }
 		  });
-
 		}
 
 		if(user) {
@@ -88,19 +87,6 @@ passport.use(new LocalStrategy({
 				return done(null,false, {message: 'Invalid password'});
 			}
 		}
-
-
-
-		// TO IMPLEMENT
-		// bcrypt.compare(pw, this.password, function(err, isMatch) {
-		//   if (err) return done(err);
-		//   if(isMatch) {
-		//     return done(null, user);
-		//   } else {
-		//     return done(null, false, { message: 'Invalid password' });
-		//   }
-		// });
-
     });
   }
 ));
@@ -114,21 +100,7 @@ function ensureAuthenticated(req, res, next) {
   }
 }
 
-// // Default return
-
-// function `ware() { 
-//   return function (req, res, next) {
-//     if (req.isAuthenticated()) {
-//       return next()
-//     } else {
-// 		res.status(401).send(JSON.stringify("Not Logged In"))
-// 	}
-//   }
-// }
-
 app.options('*', cors({credentials: true, origin: ['http://127.0.0.1:4000','https://mulligan-fund.github.io']})); // Setup CORS option
-
-
 
 app.get('/', function(req,res) {
 	res.setHeader('Content-Type', 'application/json');	
@@ -141,7 +113,7 @@ app.put('/auth',
   function(req, res) {
   	console.log("Punted through")
   	res.setHeader('Content-Type', 'application/json');	
-	res.status(202).send(JSON.stringify("./list"))
+	res.status(200).send(JSON.stringify(""))
 });
 
 // Check if authenticated
@@ -155,12 +127,6 @@ app.put('/', ensureAuthenticated, function(req, res, next) {
 	res.setHeader('Content-Type', 'application/json');	
 	res.send(JSON.stringify("Logged in"))
 });
-
-app.get('/login',  function(req, res, next) {
-	res.setHeader('Content-Type', 'application/json');	
-	res.send(JSON.stringify("Error login"))
-});
-
 
 app.get('/logout',  function(req, res){
   req.logout();
