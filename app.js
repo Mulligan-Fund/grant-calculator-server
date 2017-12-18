@@ -65,6 +65,7 @@ passport.use(new LocalStrategy({
   	console.log("Looking for",username,password)
     User.findOne({ username: username }, function (err, user) {
     	console.log("Looking for user",user,err)
+
 		if (err) { console.log(err); return done(err); }
 
 		if (!user) { 
@@ -75,7 +76,7 @@ passport.use(new LocalStrategy({
 			           console.log(err);
 			     } else {
 			           console.log('user: ' + usr.username + " saved.");
-			           done(null,user)
+			           done(null,usr)
 			     }
 		  });
 		}
@@ -113,7 +114,7 @@ app.put('/auth',
   function(req, res) {
   	console.log("Punted through")
   	res.setHeader('Content-Type', 'application/json');	
-	res.status(200).send(JSON.stringify(""))
+	res.status(202).send(JSON.stringify("./list"))
 });
 
 // Check if authenticated
