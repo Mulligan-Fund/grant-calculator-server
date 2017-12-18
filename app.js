@@ -75,6 +75,7 @@ passport.use(new LocalStrategy({
 			           console.log(err);
 			     } else {
 			           console.log('user: ' + usr.username + " saved.");
+			           done(null,user)
 			     }
 		  });
 
