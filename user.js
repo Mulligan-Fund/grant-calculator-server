@@ -1,12 +1,32 @@
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 
+var hash_password = function( password ) {
+    let salt = bcrypt.genSaltSync(); // enter number of rounds, default: 10
+    let hash = bcrypt.hashSync( password, salt );
+    return hash;
+};
 
 // create User Schema
 var User = new Schema({
   username: String,
   password: String,
   ein: {type: String, default: 000000000}
+});
+
+
+User.methods.comparePassword = function(password) {
+    if ( ! this.password ) { return false; }
+    return bcrypt.compareSync( password, this.password );
+};
+
+User.pre('save', function(next) {
+    // check if password is present and is modified.
+    if ( this.password && this.isModified('password') ) {
+        this.password = hash_password(this.password);
+    }
+    next();
 });
 
 module.exports = mongoose.model('users', User);

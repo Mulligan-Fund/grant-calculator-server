@@ -81,7 +81,7 @@ passport.use(new LocalStrategy({
 		}
 
 		if(user) {
-			if(user.password == password) {
+			if(user.comparePassword( password )) {
 				done(null,user)
 			} else {
 				return done(null,false, {message: 'Invalid password'});
