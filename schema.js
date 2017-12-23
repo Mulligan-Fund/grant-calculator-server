@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var grantmakerSchema = new Schema({
-	// _id: Schema.Types.ObjectId,
+var grantseekerSchema = new Schema({
+	grantid: Schema.Types.ObjectId,
 	userid: Schema.Types.ObjectId,
 	funder : String,
 	past_grant : String,
@@ -16,6 +16,33 @@ var grantmakerSchema = new Schema({
 	site_visit : String,
 	loi : String,
 	number_of_reports : Number,
+	preliminary_rsch_people : Schema.Types.ObjectId,
+	in_depth_rsch_people : Schema.Types.ObjectId,
+	loi_requirements : Schema.Types.ObjectId,
+	pre_loi_comm : Schema.Types.ObjectId,
+	draft_loi : Schema.Types.ObjectId,
+	review_loi_draft : Schema.Types.ObjectId,
+	edit_loi : Schema.Types.ObjectId,
+	finalize_loi : Schema.Types.ObjectId,
+	proposal_requirements : Schema.Types.ObjectId,
+	pre_proposal_comm : Schema.Types.ObjectId,
+	draft_proposal : Schema.Types.ObjectId,
+	review_proposal_draft : Schema.Types.ObjectId,
+	edit_proposal : Schema.Types.ObjectId,
+	finalize_proposal : Schema.Types.ObjectId,
+	prep_visit : Schema.Types.ObjectId,
+	site_visit : Schema.Types.ObjectId,
+	visit_follow_ups : Schema.Types.ObjectId,
+	letter_signing : Schema.Types.ObjectId,
+	post_grant_comm : Schema.Types.ObjectId,
+	report_requirements : Schema.Types.ObjectId,
+	collect_data : Schema.Types.ObjectId,
+	prepare_financials : Schema.Types.ObjectId,
+	draft_report : Schema.Types.ObjectId,
+	preview_report_draft : Schema.Types.ObjectId,
+	edit_report : Schema.Types.ObjectId,
+	finalize_report : Schema.Types.ObjectId,
+	other_activity : Schema.Types.ObjectId,
 });
 
-module.exports = mongoose.model('grant', grantmakerSchema);
+module.exports = mongoose.model('grant', grantseekerSchema);

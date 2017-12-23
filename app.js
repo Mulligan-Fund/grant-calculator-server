@@ -38,10 +38,42 @@ app.use(cors({
 	}));
 app.use(methodOverride());
 
+
 // Mongoose
 var schema = require('./schema.js');
 var User = require('./user.js');
+var Obj = require('./object.js');
+var Role = require('./title.js');
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/grantcalc'); //process.env.MONGODB_URI || 
+
+
+//Bootstrap titles, remove this in prod
+// var titles = [
+// 	{ 'title':'CEO', 'salary':200000}
+// 	, { 'title':'COO', 'salary':150000}
+// 	, { 'title':'Lacky', 'salary':4000}
+// 	, { 'title':'Analyst', 'salary':40000}
+// 	, { 'title':'Intern', 'salary':3200}
+// ]
+
+// for(var i in titles) {
+// 	var gg = new Role(titles[i])
+// 	gg.save()
+// }
+
+//Bootstrap ppl, remove this in prod
+// var ppl = [
+// 	{ 'name':'Person 1', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':200000}
+// 	, { 'name':'Person 2', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':200}
+// 	, { 'name':'Person 3', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':20000}
+// 	, { 'name':'Person 4', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':400000}
+// 	, { 'name':'Person 5', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':370000}
+// ]
+
+// for(var i in ppl) {
+// 	var gg = new Obj(ppl[i])
+// 	gg.save()
+// }
 
 passport.serializeUser(function(user, done) {
 	console.log("serializeUser")
@@ -242,6 +274,101 @@ app.put('/grant/:id?', ensureAuthenticated, function(req,res,next) {
 		}) 
 	}
 })
+
+//////////////////////////////////////
+/////////////  Items  ////////////////
+//////////////////////////////////////
+
+app.get('/role/:id?', ensureAuthenticated, function(req, res, next) {
+	var items = []
+	Role.find({}, function(err,list) {
+		if(err)  {
+			console.log("Some kind of error fetching roles",err)
+			res.sendStatus(400,err)
+		}
+		res.setHeader('Content-Type', 'application/json');	
+    	res.status(200).send(list)
+	})
+})
+
+app.get('/object/:id?', ensureAuthenticated, function(req, res, next) {
+	var items = []
+	User.findById(req.user._id,function(err,user){
+		if(err)  {
+			console.log("Some kind of error fetching user",err)
+			res.sendStatus(400,err)
+		}
+		if(req.query.list) {
+			console.log("for list",req.user._id)
+			Obj.find({userid: req.user._id}, function(err,list) {
+				console.log("/object list",list)
+				if(err)  {
+					console.log("Some kind of error fetching Ppl List",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(list)
+			})
+		} else {
+			Obj.findById(req.query.id,function(err,o){
+				console.log("/object object",o)
+				if(err)  {
+					console.log("Some kind of error fetching object",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(o)
+		    })
+		}
+	})
+})
+
+app.put('/object/:id?', ensureAuthenticated, function(req,res,next) {
+	var items = []
+	console.log("req.user for /items",req.user)
+
+	// Is this a new grant?	
+	if(req.body._id==null) {
+		console.log("Looks like a new grant")
+		object = new Obj();
+		object.userid = req.user.id
+		for(var i in req.body) {
+			object[i] = req.body[i]
+		}
+		object.save(function(err,o){
+			if(err) console.log("Error creating grant",err,o)
+			res.setHeader('Content-Type', 'application/json');	
+	    	res.status(200).send(o)
+		})
+		
+	} else {
+		User.findById(req.user._id,function(err,user){
+			console.log("/object user",user)
+			if(err)  {
+				console.log("Some kind of error fetching pins",err)
+				res.sendStatus(400,err)
+			}
+
+			if(user.username == null) {
+				res.sendStatus(400,err)	
+			} else {
+			console.log("Returned user",user)
+			console.log("To insert",req.body)
+
+			Obj.findByIdAndUpdate(req.body._id ,req.body,
+	          {upsert: false, new: true},
+	          function(err,o){
+	           if(err) console.log("Updated obj")
+	                res.setHeader('Content-Type', 'application/json');	
+					res.send(JSON.stringify(o))
+	        })
+			
+			}
+		}) 
+	}
+})
+
+
 
 app.listen(port);
 console.log('App running on port', port);
