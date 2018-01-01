@@ -60,6 +60,11 @@ with open("../grantcalc/_data/grantseeker.yml", 'r') as stream:
 	    		o = {"field": quest['dbfield'], "type": t}
 	    		lo.append(o)
 	    		print o
+	    		if quest['type'] == "peoplelist":
+	    			p = {"field": quest['dbfield']+'_hour', "type": "Number"}
+	    			lo.append(p)
+	    			print p
+	    		
 		    	# print quest['dbfield']
 generateGrantseekerSchema(lo)
 
@@ -75,6 +80,10 @@ with open("../grantcalc/_data/grantmaker.yml", 'r') as stream:
 	    		o = {"field": quest['dbfield'], "type": t}
 	    		go.append(o)
 	    		print o
+	    		if quest['type'] == "peoplelist":
+	    			p = {"field": quest['dbfield']+'_hour', "type": "Number"}
+	    			lo.append(p)
+	    			print p
 		    	# print quest['dbfield']
 generateGrantmakerSchema(go)
 
