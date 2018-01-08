@@ -323,16 +323,17 @@ app.get('/object/:id?', ensureAuthenticated, function(req, res, next) {
 
 app.put('/object/:id?', ensureAuthenticated, function(req,res,next) {
 	var items = []
-	console.log("req.user for /items",req.user)
+	console.log("req.user for /object",req.user,req.body)
 
-	// Is this a new grant?	
-	if(req.body._id==null) {
-		console.log("Looks like a new grant")
+	// Is this a new obj?	
+	if(req.body._id==null || req.body._id == 0) {
+		console.log("Looks like a new object")
 		object = new Obj();
 		object.userid = req.user.id
 		for(var i in req.body) {
-			object[i] = req.body[i]
+			if(i !== '_id') object[i] = req.body[i]
 		}
+		// if(typeof object['_id'] !== 'undefined') delete object['_id']
 		object.save(function(err,o){
 			if(err) console.log("Error creating grant",err,o)
 			res.setHeader('Content-Type', 'application/json');	
@@ -350,15 +351,13 @@ app.put('/object/:id?', ensureAuthenticated, function(req,res,next) {
 			if(user.username == null) {
 				res.sendStatus(400,err)	
 			} else {
-
-			Obj.findByIdAndUpdate(req.body._id ,req.body,
-	          {upsert: false, new: true},
-	          function(err,o){
-	           if(err) console.log("Updated obj")
-	                res.setHeader('Content-Type', 'application/json');	
-					res.send(JSON.stringify(o))
-	        })
-			
+				Obj.findByIdAndUpdate(req.body._id ,req.body,
+		          {upsert: true, new: true},
+		          function(err,o){
+		           if(err) console.log("Err Updated obj",err)
+		                res.setHeader('Content-Type', 'application/json');	
+						res.send(JSON.stringify(o))
+		        })
 			}
 		}) 
 	}
