@@ -259,8 +259,6 @@ app.put('/grant/:id?', ensureAuthenticated, function(req,res,next) {
 			if(user.username == null) {
 				res.sendStatus(400,err)	
 			} else {
-			console.log("Returned user",user)
-			console.log("To insert",req.body)
 
 			schema.findByIdAndUpdate(req.body._id ,req.body,
 	          {upsert: false, new: true},
@@ -352,8 +350,6 @@ app.put('/object/:id?', ensureAuthenticated, function(req,res,next) {
 			if(user.username == null) {
 				res.sendStatus(400,err)	
 			} else {
-			console.log("Returned user",user)
-			console.log("To insert",req.body)
 
 			Obj.findByIdAndUpdate(req.body._id ,req.body,
 	          {upsert: false, new: true},
