@@ -363,6 +363,28 @@ app.put('/object/:id?', ensureAuthenticated, function(req,res,next) {
 	}
 })
 
+app.delete('/object/:id?', ensureAuthenticated, function(req,res,next) {
+		User.findById(req.user._id,function(err,user){
+			console.log("DEL /object user",user)
+			if(err)  {
+				console.log("Some kind of error fetching pins",err)
+				res.sendStatus(400,err)
+			}
+
+			if(user.username == null) {
+				res.sendStatus(400,err)	
+			} else {
+				console.log("Searching to DEL obj",req.body.id)
+				Obj.findById(req.body.id).remove( function(err,o){
+		           if(err) console.log("Err Updated obj",err)
+		           	console.log('DEL /object',o)
+	                res.setHeader('Content-Type', 'application/json');	
+					res.send(o)
+		        })
+			}
+		}) 
+})
+
 
 
 app.listen(port);
