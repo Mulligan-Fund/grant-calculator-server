@@ -95,14 +95,14 @@ passport.use(new LocalStrategy({
         },
   function(username, password, done) {
   	console.log("Looking for",username,password)
-    User.findOne({ username: username }, function (err, user) {
+    User.findOne({ username: username.toLowerCase() }, function (err, user) {
     	console.log("Looking for user",user,err)
 
 		if (err) { console.log(err); return done(err); }
 
 		if (!user) { 
 			console.log("Making user")
-		     usr = new User({ username: username, password: password });
+		     usr = new User({ username: username.toLowerCase(), password: password.toLowerCase() });
 		     usr.save(function(err) {
 			     if(err) {
 			           console.log(err);
@@ -114,7 +114,7 @@ passport.use(new LocalStrategy({
 		}
 
 		if(user) {
-			if(user.comparePassword( password )) {
+			if(user.comparePassword( password.toLowerCase() )) {
 				done(null,user)
 			} else {
 				return done(null,false, {message: 'Invalid password'});
