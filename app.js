@@ -15,6 +15,15 @@ var express = require('express')
 
 var heroku = process.env.HEROKU_TRUE || false
 
+
+var corsOrigins = ['http://127.0.0.1:4000', 'http://localhost:4000','https://mulligan-fund.github.io','https://grantcalc.herokuapp.com']
+var corsSettings = cors({
+	credentials: true
+	, preflightContinue: true
+	, allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept"
+	, origin: corsOrigins
+	});
+
 app.set('view engine', 'jade');
 
 app.use(function(req, res, next) {
@@ -30,12 +39,7 @@ app.use(sessions({ secret: 'wowfoundations'
 					    , httpOnly: false } } ));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors({
-	credentials: true
-	, preflightContinue: true
-	, allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept"
-	, origin: ['http://127.0.0.1:4000', 'http://localhost:4000','https://mulligan-fund.github.io','https://grantcalc.herokuapp.com']
-	}));
+app.use(corsSettings);
 app.use(methodOverride());
 
 
@@ -133,7 +137,10 @@ function ensureAuthenticated(req, res, next) {
   }
 }
 
-app.options('*', cors({credentials: true, origin: ['http://127.0.0.1:4000','https://mulligan-fund.github.io']})); // Setup CORS option
+app.options('*', cors({
+	credentials: true
+	, origin: corsOrigins
+	})); // Setup CORS option
 
 app.get('/', function(req,res) {
 	res.setHeader('Content-Type', 'application/json');	
