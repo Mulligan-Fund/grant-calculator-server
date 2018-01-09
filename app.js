@@ -20,7 +20,7 @@ var corsOrigins = ['http://127.0.0.1:4000', 'http://localhost:4000','https://mul
 var corsSettings = cors({
 	credentials: true
 	, preflightContinue: true
-	, allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept"
+	, allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
 	, origin: corsOrigins
 	});
 
@@ -153,6 +153,7 @@ app.put('/auth',
   function(req, res) {
   	console.log("Punted through")
   	res.setHeader('Content-Type', 'application/json');	
+  	res.setHeader('Content-Length', '0');
 	res.status(202).send(JSON.stringify("./list"))
 });
 
