@@ -33,8 +33,8 @@ app.use(passport.session());
 app.use(cors({
 	credentials: true
 	, preflightContinue: true
-	, allowedHeaders: "Origin, origin, X-Requested-With, Content-Type, Accept"
-	, origin: ['http://127.0.0.1:4000', 'http://localhost:4000' ,'https://mulligan-fund.github.io/']
+	, allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept"
+	, origin: ['http://127.0.0.1:4000', 'http://localhost:4000','https://mulligan-fund.github.io','https://grantcalc.herokuapp.com']
 	}));
 app.use(methodOverride());
 
