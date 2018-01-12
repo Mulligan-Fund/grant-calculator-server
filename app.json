@@ -1,0 +1,13 @@
+{
+  "name": "Grant Calculator Server",
+  "description": "Simple rest app to power the grant calculator or forks",
+  "repository": "https://github.com/heroku/node-js-sample",
+  // "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "express", "static"],
+   "addons": [
+    {
+      "plan": "mongolab:shared-single-small",
+      "as": "mongodb"
+    },
+  ]
+}
