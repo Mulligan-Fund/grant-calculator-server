@@ -54,16 +54,18 @@ with open("../grantcalc/_data/grantseeker.yml", 'r') as stream:
 	    for sect in page["sections"]:
 	    	for quest in sect["questions"]:
 
+	    		arr = "[{person: Schema.Types.ObjectId, hours: Number}]"
+
 	    		t = "String" if quest['type'] in ["dropdown","text"] else "Number"
-	    		t = "Schema.Types.ObjectId" if quest['type'] == "peoplelist" else t
+	    		t = arr if quest['type'] == "peoplelist" else t
 
 	    		o = {"field": quest['dbfield'], "type": t}
 	    		lo.append(o)
 	    		print o
-	    		if quest['type'] == "peoplelist":
-	    			p = {"field": quest['dbfield']+'_hour', "type": "Number"}
-	    			lo.append(p)
-	    			print p
+	    		# if quest['type'] == "peoplelist":
+	    		# 	p = {"field": quest['dbfield']+'_hour', "type": "Number"}
+	    		# 	lo.append(p)
+	    		# 	print p
 	    		
 		    	# print quest['dbfield']
 generateGrantseekerSchema(lo)
