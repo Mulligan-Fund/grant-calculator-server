@@ -45,6 +45,7 @@ app.use(methodOverride());
 
 // Mongoose
 var schema = require('./schema.js');
+var maker = require('./maker.js');
 var User = require('./user.js');
 var Obj = require('./object.js');
 var Role = require('./title.js');
@@ -203,7 +204,7 @@ app.put("/user", ensureAuthenticated,function(req,res,next){
 
 
 //////////////////////////////////////
-/////////////  Items  ////////////////
+/////////////  Grantseeker  ////////////////
 //////////////////////////////////////
 
 
@@ -268,10 +269,11 @@ app.put('/grant/:id?', ensureAuthenticated, function(req,res,next) {
 				res.sendStatus(400,err)	
 			} else {
 
+			console.log("Attempt to insert",req.body)
 			schema.findByIdAndUpdate(req.body._id ,req.body,
 	          {upsert: false, new: true},
 	          function(err,grant){
-	           if(err) console.log("Updated form")
+	           if(err) console.log("Updated form",err,grant)
 	                res.setHeader('Content-Type', 'application/json');	
 					res.send(JSON.stringify(grant))
 	        })
@@ -280,6 +282,87 @@ app.put('/grant/:id?', ensureAuthenticated, function(req,res,next) {
 		}) 
 	}
 })
+
+
+//////////////////////////////////////
+/////////////  GrantMaker  ////////////////
+//////////////////////////////////////
+
+
+app.get('/maker/:id?', ensureAuthenticated, function(req, res, next) {
+	var items = []
+	User.findById(req.user._id,function(err,user){
+		if(err)  {
+			console.log("Some kind of error fetching user",err)
+			res.sendStatus(400,err)
+		}
+		if(req.query.list) {
+			maker.find({userid:req.user._id}, function(err,list) {
+				console.log("/maker list",list)
+				if(err)  {
+					console.log("Some kind of error fetching grant",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(list)
+			})
+		} else {
+			maker.findById(req.query.id,function(err,grant){
+				console.log("/maker grant",grant)
+				if(err)  {
+					console.log("Some kind of error fetching grant",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(grant)
+		    })
+		}
+	})
+})
+
+app.put('/maker/:id?', ensureAuthenticated, function(req,res,next) {
+	var items = []
+	// Is this a new grant?	
+	if(req.body._id==null) {
+		console.log("Looks like a new grant")
+		grant = new maker();
+		grant.userid = req.user.id
+		for(var i in req.body) {
+			grant[i] = req.body[i]
+		}
+		grant.save(function(err,grant){
+			if(err) console.log("Error creating grant",err,grant)
+			res.setHeader('Content-Type', 'application/json');	
+	    	res.status(200).send(grant)
+		})
+		
+	} else {
+		User.findById(req.user._id,function(err,user){
+			console.log("/grant user",user)
+			if(err)  {
+				console.log("Some kind of error fetching pins",err)
+				res.sendStatus(400,err)
+			}
+
+			if(user.username == null) {
+				res.sendStatus(400,err)	
+			} else {
+
+			console.log("Attempt to insert",req.body)
+			maker.findByIdAndUpdate(req.body._id ,req.body,
+	          {upsert: false, new: true},
+	          function(err,grant){
+	           if(err) console.log("Updated form",err,grant)
+	                res.setHeader('Content-Type', 'application/json');	
+					res.send(JSON.stringify(grant))
+	        })
+			
+			}
+		}) 
+	}
+})
+
+
 
 //////////////////////////////////////
 /////////////  Items  ////////////////

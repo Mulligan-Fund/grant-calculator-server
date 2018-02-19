@@ -37,7 +37,7 @@ def generateGrantmakerSchema(l):
 		lines.append("\t"+i["field"]+" : "+i["type"]+",\n")
 
 	lines.append("});\n\n")
-	lines.append("module.exports = mongoose.model('grant', grantmakerSchema);\n")
+	lines.append("module.exports = mongoose.model('maker', grantmakerSchema);\n")
 	
 
 	fo = open("maker.js", "w")
@@ -54,7 +54,7 @@ with open("../grantcalc/_data/grantseeker.yml", 'r') as stream:
 	    for sect in page["sections"]:
 	    	for quest in sect["questions"]:
 
-	    		arr = "[{person: Schema.Types.ObjectId, hours: Number}]"
+	    		arr = "[{_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number}]"
 
 	    		t = "String" if quest['type'] in ["dropdown","text"] else "Number"
 	    		t = arr if quest['type'] == "peoplelist" else t

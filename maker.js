@@ -86,4 +86,4 @@ var grantmakerSchema = new Schema({
 	prog_other_activity : Schema.Types.ObjectId,
 });
 
-module.exports = mongoose.model('grant', grantmakerSchema);
+module.exports = mongoose.model('maker', grantmakerSchema);
