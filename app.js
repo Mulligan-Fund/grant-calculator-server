@@ -249,6 +249,7 @@ app.put('/grant/:id?', ensureAuthenticated, function(req,res,next) {
 		grant = new schema();
 		grant.userid = req.user.id
 		for(var i in req.body) {
+			// console.log(i,typeof i)
 			grant[i] = req.body[i]
 		}
 		grant.save(function(err,grant){
