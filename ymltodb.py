@@ -76,17 +76,15 @@ with open("../grantcalc/_data/grantmaker.yml", 'r') as stream:
     for page in out:
 	    for sect in page["sections"]:
 	    	for quest in sect["questions"]:
+
+	    		arr = "[{_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number}]"
+
 	    		t = "String" if quest['type'] in ["dropdown","text"] else "Number"
-	    		t = "Schema.Types.ObjectId" if quest['type'] == "peoplelist" else t
+	    		t = arr if quest['type'] == "peoplelist" else t
 
 	    		o = {"field": quest['dbfield'], "type": t}
-	    		go.append(o)
+	    		lo.append(o)
 	    		print o
-	    		if quest['type'] == "peoplelist":
-	    			p = {"field": quest['dbfield']+'_hour', "type": "Number"}
-	    			lo.append(p)
-	    			print p
-		    	# print quest['dbfield']
 generateGrantmakerSchema(go)
 
 

@@ -300,7 +300,7 @@ app.get('/maker/:id?', ensureAuthenticated, function(req, res, next) {
 			maker.find({userid:req.user._id}, function(err,list) {
 				console.log("/maker list",list)
 				if(err)  {
-					console.log("Some kind of error fetching grant",err)
+					console.log("Some kind of error fetching maker",err)
 					res.sendStatus(400,err)
 				}
 				res.setHeader('Content-Type', 'application/json');	
@@ -324,21 +324,21 @@ app.put('/maker/:id?', ensureAuthenticated, function(req,res,next) {
 	var items = []
 	// Is this a new grant?	
 	if(req.body._id==null) {
-		console.log("Looks like a new grant")
+		console.log("Looks like a new grant maker")
 		grant = new maker();
 		grant.userid = req.user.id
 		for(var i in req.body) {
 			grant[i] = req.body[i]
 		}
 		grant.save(function(err,grant){
-			if(err) console.log("Error creating grant",err,grant)
+			if(err) console.log("Error creating maker",err,grant)
 			res.setHeader('Content-Type', 'application/json');	
 	    	res.status(200).send(grant)
 		})
 		
 	} else {
 		User.findById(req.user._id,function(err,user){
-			console.log("/grant user",user)
+			console.log("/maker user",user)
 			if(err)  {
 				console.log("Some kind of error fetching pins",err)
 				res.sendStatus(400,err)
@@ -348,11 +348,11 @@ app.put('/maker/:id?', ensureAuthenticated, function(req,res,next) {
 				res.sendStatus(400,err)	
 			} else {
 
-			console.log("Attempt to insert",req.body)
+			console.log("Attempt to insert maker",req.body)
 			maker.findByIdAndUpdate(req.body._id ,req.body,
 	          {upsert: false, new: true},
 	          function(err,grant){
-	           if(err) console.log("Updated form",err,grant)
+	           if(err) console.log("Err Updated grantmaker",err,grant)
 	                res.setHeader('Content-Type', 'application/json');	
 					res.send(JSON.stringify(grant))
 	        })
