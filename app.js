@@ -52,33 +52,266 @@ var Role = require('./title.js');
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/grantcalc'); //process.env.MONGODB_URI || 
 
 
-//Bootstrap titles, remove this in prod
-// var titles = [
-// 	{ 'title':'CEO', 'salary':200000}
-// 	, { 'title':'COO', 'salary':150000}
-// 	, { 'title':'Lacky', 'salary':4000}
-// 	, { 'title':'Analyst', 'salary':40000}
-// 	, { 'title':'Intern', 'salary':3200}
-// ]
+// Bootstrap titles, remove this in prod
+var titles = [
+  {
+    "title": "Chief Executive Officer",
+    "salary": 134370
+  },
+  {
+    "title": "Chief Administrative Officer",
+    "salary": 107201
+  },
+  {
+    "title": "Chief Financial Officer",
+    "salary": 123636
+  },
+  {
+    "title": "Chief Information Officer",
+    "salary": 140983
+  },
+  {
+    "title": "Chief Operations Officer",
+    "salary": 122447
+  },
+  {
+    "title": "General Counselor",
+    "salary": 185247
+  },
+  {
+    "title": "Accounting Assistant",
+    "salary": 43627
+  },
+  {
+    "title": "Director; Finance",
+    "salary": 83665
+  },
+  {
+    "title": "Manager; Accounting",
+    "salary": 66698
+  },
+  {
+    "title": "Payroll Assistant",
+    "salary": 41027
+  },
+  {
+    "title": "Staff Accountant",
+    "salary": 53633
+  },
+  {
+    "title": "Vice President; Finance",
+    "salary": 112935
+  },
+  {
+    "title": "Administrative Assistant",
+    "salary": 36145
+  },
+  {
+    "title": "Administrative Secretary",
+    "salary": 43181
+  },
+  {
+    "title": "Director; Administration",
+    "salary": 54201
+  },
+  {
+    "title": "Executive Secretary",
+    "salary": 50915
+  },
+  {
+    "title": "Member Services Representative",
+    "salary": 36688
+  },
+  {
+    "title": "Office Assistant",
+    "salary": 30809
+  },
+  {
+    "title": "Office Manager",
+    "salary": 40193
+  },
+  {
+    "title": "Receptionist",
+    "salary": 28966
+  },
+  {
+    "title": "Secretary",
+    "salary": 30336
+  },
+  {
+    "title": "Director; Communications",
+    "salary": 76640
+  },
+  {
+    "title": "Director; Marketing",
+    "salary": 81239
+  },
+  {
+    "title": "Manager; Marketing",
+    "salary": 62646
+  },
+  {
+    "title": "Manager; Public Relations",
+    "salary": 57285
+  },
+  {
+    "title": "Vice President; Communications",
+    "salary": 133126
+  },
+  {
+    "title": "Web & Social Media Director",
+    "salary": 55530
+  },
+  {
+    "title": "Director; Government Relations",
+    "salary": 124862
+  },
+  {
+    "title": "Public Policy Analyst",
+    "salary": 81888
+  },
+  {
+    "title": "Staff Attorney",
+    "salary": 68994
+  },
+  {
+    "title": "Vice President; Government Relations",
+    "salary": 201816
+  },
+  {
+    "title": "Director; Human Resources",
+    "salary": 83481
+  },
+  {
+    "title": "Human Resources Assistant",
+    "salary": 38318
+  },
+  {
+    "title": "Manager; Human Resources",
+    "salary": 65405
+  },
+  {
+    "title": "Vice President; Human Resources",
+    "salary": 135332
+  },
+  {
+    "title": "Case Manager",
+    "salary": 36880
+  },
+  {
+    "title": "Counselor",
+    "salary": 35709
+  },
+  {
+    "title": "Social Worker",
+    "salary": 50324
+  },
+  {
+    "title": "Trainer",
+    "salary": 46351
+  },
+  {
+    "title": "Director; Information Technology",
+    "salary": 104475
+  },
+  {
+    "title": "Systems Analyst",
+    "salary": 69356
+  },
+  {
+    "title": "Web Developer",
+    "salary": 76152
+  },
+  {
+    "title": "Director; Convention/Meetings",
+    "salary": 98032
+  },
+  {
+    "title": "Manager; Convention/Meetings",
+    "salary": 63222
+  },
+  {
+    "title": "Development Associate",
+    "salary": 41877
+  },
+  {
+    "title": "Director; Development/Fundraising",
+    "salary": 72179
+  },
+  {
+    "title": "Director; Membership",
+    "salary": 81212
+  },
+  {
+    "title": "Grant Writer",
+    "salary": 49859
+  },
+  {
+    "title": "Manager; Development/Fundraising",
+    "salary": 61816
+  },
+  {
+    "title": "Program Assistant",
+    "salary": 35274
+  },
+  {
+    "title": "Program Coordinator",
+    "salary": 41466
+  },
+  {
+    "title": "Program Director",
+    "salary": 65855
+  },
+  {
+    "title": "Program Manager",
+    "salary": 58184
+  },
+  {
+    "title": "Vice President; Development/Fundraising",
+    "salary": 126684
+  },
+  {
+    "title": "Vice President; Membership",
+    "salary": 136840
+  },
+  {
+    "title": "Volunteer Coordinator",
+    "salary": 38333
+  },
+  {
+    "title": "Director; Education",
+    "salary": 87045
+  },
+  {
+    "title": "Director; Research",
+    "salary": 87733
+  },
+  {
+    "title": "Manager; Education",
+    "salary": 64785
+  },
+  {
+    "title": "Research Assistant",
+    "salary": 51005
+  },
+  {
+    "title": "Research Associate",
+    "salary": 54909
+  },
+  {
+    "title": "Research Fellow",
+    "salary": 113688
+  },
+  {
+    "title": "Senior Research Fellow",
+    "salary": 145860
+  }
+]
 
-// for(var i in titles) {
-// 	var gg = new Role(titles[i])
-// 	gg.save()
-// }
-
-//Bootstrap ppl, remove this in prod
-// var ppl = [
-// 	{ 'name':'Person 1', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':200000}
-// 	, { 'name':'Person 2', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':200}
-// 	, { 'name':'Person 3', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':20000}
-// 	, { 'name':'Person 4', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':400000}
-// 	, { 'name':'Person 5', 'userid': '5a3ebaf915a1118aef083a7e', 'title': '5a3ec0ec79c3078c31d5cf57' ,'salary':370000}
-// ]
-
-// for(var i in ppl) {
-// 	var gg = new Obj(ppl[i])
-// 	gg.save()
-// }
+for(var i in titles) {
+	var gg = new Role(titles[i])
+	gg.save()
+}
 
 passport.serializeUser(function(user, done) {
 	console.log("serializeUser")
