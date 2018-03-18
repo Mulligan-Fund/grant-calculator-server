@@ -9,8 +9,7 @@ def generateGrantseekerSchema(l):
 	lines.append("var personHourSchema = new Schema({_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number});\n")
 	lines.append("var grantseekerSchema = new Schema({\n")
 	lines.append("\tgrantid: Schema.Types.ObjectId,\n")
-	lines.append("\tuserid: Schema.Types.ObjectId,\n")
-	
+	lines.append("\tuserid: Schema.Types.ObjectId,\n")	
 
 	for i in l:
 		lines.append("\t"+i["field"]+" : "+i["type"]+",\n")
@@ -34,7 +33,6 @@ def generateGrantmakerSchema(l):
 	lines.append("\tgrantid: Schema.Types.ObjectId,\n")
 	lines.append("\tuserid: Schema.Types.ObjectId,\n")
 	
-
 	for i in l:
 		lines.append("\t"+i["field"]+" : "+i["type"]+",\n")
 
@@ -46,8 +44,31 @@ def generateGrantmakerSchema(l):
 	fo.writelines( lines )
 	fo.close()
 
+def generateOrgInfoSchema(l):
+	target = ""
+
+	lines = []
+	lines.append("var mongoose = require('mongoose');\n")
+	lines.append("var Schema = mongoose.Schema;\n")
+	lines.append("var personHourSchema = new Schema({_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number});\n")
+	lines.append("var orginfoSchema = new Schema({\n")
+	lines.append("\tgrantid: Schema.Types.ObjectId,\n")
+	lines.append("\tuserid: Schema.Types.ObjectId,\n")
+
+	for i in l:
+		lines.append("\t"+i["field"]+" : "+i["type"]+",\n")
+
+	lines.append("});\n\n")
+	lines.append("module.exports = mongoose.model('orginfo', orginfoSchema);\n")
+	
+
+	fo = open("orginfo.js", "w")
+	fo.writelines( lines )
+	fo.close()
+
 lo = []
 go = []
+to = []
 
 with open("../grantcalc/_data/grantseeker.yml", 'r') as stream:
     out = yaml.load(stream)
@@ -90,6 +111,25 @@ with open("../grantcalc/_data/grantmaker.yml", 'r') as stream:
 	    		go.append(o)
 	    		print o
 generateGrantmakerSchema(go)
+
+
+with open("../grantcalc/_data/orginfo.yml", 'r') as stream:
+    out = yaml.load(stream)
+    
+    for page in out:
+	    for sect in page["sections"]:
+	    	for quest in sect["questions"]:
+
+	    		# arr = "[{_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number}]"
+	    		arr = "[personHourSchema]"
+
+	    		t = "String" if quest['type'] in ["dropdown","text"] else "Number"
+	    		t = arr if quest['type'] == "peoplelist" else t
+
+	    		o = {"field": quest['dbfield'], "type": t}
+	    		to.append(o)
+	    		print o
+generateOrgInfoSchema(to)
 
 
 

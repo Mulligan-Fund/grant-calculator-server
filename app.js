@@ -46,6 +46,7 @@ app.use(methodOverride());
 // Mongoose
 var schema = require('./schema.js');
 var maker = require('./maker.js');
+var orginfo = require('./orginfo.js');
 var User = require('./user.js');
 var Obj = require('./object.js');
 var Role = require('./title.js');
@@ -371,6 +372,107 @@ app.delete('/maker/:id?', ensureAuthenticated, function(req,res,next) {
 		} else {
 			console.log("Searching to DEL grant",req.body.id)
 			maker.findById(req.body.id).remove( function(err,o){
+	           if(err) console.log("Err Updated obj",err)
+	           	console.log('DEL /object',o)
+                res.setHeader('Content-Type', 'application/json');	
+				res.send(o)
+	        })
+		}
+	}) 
+})
+
+
+
+//////////////////////////////////////
+/////////////  OrgInfo  ////////////////
+//////////////////////////////////////
+
+
+app.get('/org/:id?', ensureAuthenticated, function(req, res, next) {
+	var items = []
+	User.findById(req.user._id,function(err,user){
+		if(err)  {
+			console.log("Some kind of error fetching user",err)
+			res.sendStatus(400,err)
+		}
+		if(req.query.list) {
+			orginfo.find({userid:req.user._id}, function(err,list) {
+				console.log("/org list",list)
+				if(err)  {
+					console.log("Some kind of error fetching org",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(list)
+			})
+		} else {
+			orginfo.findById(req.query.id,function(err,grant){
+				console.log("/org grant",grant)
+				if(err)  {
+					console.log("Some kind of error fetching grant",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(grant)
+		    })
+		}
+	})
+})
+
+app.put('/org/:id?', ensureAuthenticated, function(req,res,next) {
+	var items = []
+	// Is this a new grant?	
+	if(req.body._id==null) {
+		console.log("Looks like a new orginfo")
+		grant = new orginfo();
+		grant.userid = req.user.id
+		for(var i in req.body) {
+			grant[i] = req.body[i]
+		}
+		grant.save(function(err,grant){
+			if(err) console.log("Error creating org",err,grant)
+			res.setHeader('Content-Type', 'application/json');	
+	    	res.status(200).send(grant)
+		})
+		
+	} else {
+		User.findById(req.user._id,function(err,user){
+			console.log("/org user",user)
+			if(err)  {
+				console.log("Some kind of error fetching pins",err)
+				res.sendStatus(400,err)
+			}
+
+			if(user.username == null) {
+				res.sendStatus(400,err)	
+			} else {
+				console.log("Attempt to insert org",req.body)
+				orginfo.findByIdAndUpdate(req.body._id ,req.body,
+		          {upsert: false, new: true},
+		          function(err,grant){
+		           if(err) console.log("Err Updated orginfo",err,grant)
+		                res.setHeader('Content-Type', 'application/json');	
+						res.send(JSON.stringify(grant))
+		        })		
+			}
+		}) 
+	}
+})
+
+// Note, this should prob not be used
+app.delete('/org/:id?', ensureAuthenticated, function(req,res,next) {
+	User.findById(req.user._id,function(err,user){
+		console.log("DEL /grant user",user)
+		if(err)  {
+			console.log("Some kind of error fetching pins",err)
+			res.sendStatus(400,err)
+		}
+
+		if(user.username == null) {
+			res.sendStatus(400,err)	
+		} else {
+			console.log("Searching to DEL grant",req.body.id)
+			orginfo.findById(req.body.id).remove( function(err,o){
 	           if(err) console.log("Err Updated obj",err)
 	           	console.log('DEL /object',o)
                 res.setHeader('Content-Type', 'application/json');	
