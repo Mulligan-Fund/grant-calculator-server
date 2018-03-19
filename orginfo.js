@@ -11,4 +11,4 @@ var orginfoSchema = new Schema({
 	yearly_rev : Number,
 });
 
-module.exports = mongoose.model('orginfo', orginfoSchema);
+module.exports = mongoose.model('profile', orginfoSchema);

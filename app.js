@@ -46,7 +46,7 @@ app.use(methodOverride());
 // Mongoose
 var schema = require('./schema.js');
 var maker = require('./maker.js');
-var orginfo = require('./orginfo.js');
+var profile = require('./orginfo.js');
 var User = require('./user.js');
 var Obj = require('./object.js');
 var Role = require('./title.js');
@@ -396,7 +396,7 @@ app.get('/org/:id?', ensureAuthenticated, function(req, res, next) {
 			res.sendStatus(400,err)
 		}
 		if(req.query.list) {
-			orginfo.find({userid:req.user._id}, function(err,list) {
+			profile.find({userid:req.user._id}, function(err,list) {
 				console.log("/org list",list)
 				if(err)  {
 					console.log("Some kind of error fetching org",err)
@@ -406,7 +406,7 @@ app.get('/org/:id?', ensureAuthenticated, function(req, res, next) {
 		    	res.status(200).send(list)
 			})
 		} else {
-			orginfo.findById(req.query.id,function(err,grant){
+			profile.findById(req.query.id,function(err,grant){
 				console.log("/org grant",grant)
 				if(err)  {
 					console.log("Some kind of error fetching grant",err)
@@ -424,15 +424,15 @@ app.put('/org/:id?', ensureAuthenticated, function(req,res,next) {
 	// Is this a new grant?	
 	if(req.body._id==null) {
 		console.log("Looks like a new orginfo")
-		grant = new orginfo();
-		grant.userid = req.user.id
+		org = new profile();
+		org.userid = req.user.id
 		for(var i in req.body) {
-			grant[i] = req.body[i]
+			org[i] = req.body[i]
 		}
-		grant.save(function(err,grant){
-			if(err) console.log("Error creating org",err,grant)
+		org.save(function(err,o){
+			if(err) console.log("Error creating org",err,o)
 			res.setHeader('Content-Type', 'application/json');	
-	    	res.status(200).send(grant)
+	    	res.status(200).send(o)
 		})
 		
 	} else {
@@ -447,8 +447,8 @@ app.put('/org/:id?', ensureAuthenticated, function(req,res,next) {
 				res.sendStatus(400,err)	
 			} else {
 				console.log("Attempt to insert org",req.body)
-				orginfo.findByIdAndUpdate(req.body._id ,req.body,
-		          {upsert: false, new: true},
+				profile.findByIdAndUpdate(req.body._id ,req.body,
+		          {upsert: true, new: true},
 		          function(err,grant){
 		           if(err) console.log("Err Updated orginfo",err,grant)
 		                res.setHeader('Content-Type', 'application/json');	
@@ -472,7 +472,7 @@ app.delete('/org/:id?', ensureAuthenticated, function(req,res,next) {
 			res.sendStatus(400,err)	
 		} else {
 			console.log("Searching to DEL grant",req.body.id)
-			orginfo.findById(req.body.id).remove( function(err,o){
+			profile.findById(req.body.id).remove( function(err,o){
 	           if(err) console.log("Err Updated obj",err)
 	           	console.log('DEL /object',o)
                 res.setHeader('Content-Type', 'application/json');	
