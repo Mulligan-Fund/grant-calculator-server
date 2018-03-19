@@ -42,6 +42,7 @@ var grantseekerSchema = new Schema({
 	modifications : [personHourSchema],
 	draft_report : [personHourSchema],
 	monitoring_qs : [personHourSchema],
+	other_label : String,
 	monitoring_other : [personHourSchema],
 });
 

@@ -75,6 +75,7 @@ var grantmakerSchema = new Schema({
 	other_comm_reports : [personHourSchema],
 	grant_mods : [personHourSchema],
 	report_board : [personHourSchema],
+	other_label : String,
 	gm_reporting_other : [personHourSchema],
 });
 
