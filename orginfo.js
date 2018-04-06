@@ -6,9 +6,10 @@ var orginfoSchema = new Schema({
 	userid: Schema.Types.ObjectId,
 	username : String,
 	user_role : String,
+	grantorg : String,
 	name_of_org : String,
 	ein : Number,
 	yearly_rev : Number,
 });
 
-module.exports = mongoose.model('profile', orginfoSchema);
+module.exports = mongoose.model('orginfo', orginfoSchema);
