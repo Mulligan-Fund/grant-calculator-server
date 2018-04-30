@@ -5,7 +5,8 @@ var objectSchema = new Schema({
 	userid: Schema.Types.ObjectId,
 	name : String,
 	title : Schema.Types.ObjectId,
-	salary : Number
+	salary : Number,
+	delete : Boolean
 });
 
 module.exports = mongoose.model('object', objectSchema);
