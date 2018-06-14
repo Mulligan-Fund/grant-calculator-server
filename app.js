@@ -606,11 +606,11 @@ app.get('/admin/users', ensureAuthenticated, function(req, res, next) {
 			console.log("Some kind of error fetching user",err)
 			res.sendStatus(400,err)
 		}
-		else if(!user.admin)  {
+		else if(user.admin)  {
 			console.log("not admin",err,user)
 			res.sendStatus(401,err)
-		}
-		
+		} else {
+
 		User.aggregate([
 				{
 				"$lookup": {
@@ -644,6 +644,7 @@ app.get('/admin/users', ensureAuthenticated, function(req, res, next) {
 			res.setHeader('Content-Type', 'application/json');	
 	    	res.status(200).send(list)
 		})
+		}
 	})
 })
 
