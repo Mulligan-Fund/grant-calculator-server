@@ -596,6 +596,56 @@ app.delete('/object/:id?', ensureAuthenticated, function(req,res,next) {
 		}) 
 })
 
+///////////////////
+/// Admin functions
+///////////////////
+app.get('/admin/users', ensureAuthenticated, function(req, res, next) {
+	var items = []
+	User.findById(req.user._id,function(err,user){
+		if(err)  {
+			console.log("Some kind of error fetching user",err)
+			res.sendStatus(400,err)
+		}
+		else if(!user.admin)  {
+			console.log("not admin",err,user)
+			res.sendStatus(401,err)
+		}
+		
+		User.aggregate([
+				{
+				"$lookup": {
+					"from": "profiles",
+					"localField": "_id",
+					"foreignField": "userid",
+					"as": "user_profiles"
+					}
+				},
+				{
+				"$lookup": {
+					"from": "grants",
+					"localField": "_id",
+					"foreignField": "userid",
+					"as": "seeker"
+					}
+				},
+				{
+				"$lookup": {
+					"from": "makers",
+					"localField": "_id",
+					"foreignField": "userid",
+					"as": "maker"
+					}
+				}
+			], function(err,list) {
+			if(err)  {
+				console.log("Some kind of error fetching roles",err)
+				res.sendStatus(400,err)
+			}
+			res.setHeader('Content-Type', 'application/json');	
+	    	res.status(200).send(list)
+		})
+	})
+})
 
 
 app.listen(port);
