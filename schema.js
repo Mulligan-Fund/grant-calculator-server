@@ -4,6 +4,8 @@ var personHourSchema = new Schema({_id: Schema.Types.ObjectId, person: Schema.Ty
 var grantseekerSchema = new Schema({
 	grantid: Schema.Types.ObjectId,
 	userid: Schema.Types.ObjectId,
+	template: Schema.Types.Boolean,
+	globaltemplate: Schema.Types.Boolean,
 	funder : String,
 	grant_program : String,
 	primary_issue : String,

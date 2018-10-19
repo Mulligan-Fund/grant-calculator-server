@@ -10,6 +10,8 @@ def generateGrantseekerSchema(l):
 	lines.append("var grantseekerSchema = new Schema({\n")
 	lines.append("\tgrantid: Schema.Types.ObjectId,\n")
 	lines.append("\tuserid: Schema.Types.ObjectId,\n")	
+	lines.append("\ttemplate: Schema.Types.Boolean,\n")
+	lines.append("\tglobaltemplate: Schema.Types.Boolean,\n")
 
 	for i in l:
 		lines.append("\t"+i["field"]+" : "+i["type"]+",\n")
@@ -32,6 +34,8 @@ def generateGrantmakerSchema(l):
 	lines.append("var grantmakerSchema = new Schema({\n")
 	lines.append("\tgrantid: Schema.Types.ObjectId,\n")
 	lines.append("\tuserid: Schema.Types.ObjectId,\n")
+	lines.append("\ttemplate: Schema.Types.Boolean,\n")
+	lines.append("\tglobaltemplate: Schema.Types.Boolean,\n")
 	
 	for i in l:
 		lines.append("\t"+i["field"]+" : "+i["type"]+",\n")
