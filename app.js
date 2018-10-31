@@ -383,8 +383,80 @@ app.delete('/maker/:id?', ensureAuthenticated, function(req,res,next) {
 
 
 
+
 //////////////////////////////////////
-/////////////  OrgInfo  ////////////////
+/////////////  Template  /////////////
+//////////////////////////////////////
+
+app.get('/template/:type', ensureAuthenticated, function(req, res, next) {
+	var items = []
+	User.findById(req.user._id,function(err,user){
+		if(err)  {
+			console.log("Some kind of error fetching user",err)
+			res.sendStatus(400,err)
+		}
+		console.log("Template search:",req.params.type)
+		// Get List of Templates
+		if(req.params.type  == "maker") {
+			maker.find({userid:req.user._id,template:true}, function(err,list) {
+				console.log("/template/maker",list)
+				if(err)  {
+					console.log("Some kind of error fetching template maker",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(list)
+			})
+		} else if(req.params.type  == "seeker") {
+			grant.find({userid:req.user._id,template:true}, function(err,list) {
+				console.log("/template/seeker",list)
+				if(err)  {
+					console.log("Some kind of error fetching template seeker",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(list)
+			})
+		}
+	})
+})
+
+app.get('/template/:type/:id?', ensureAuthenticated, function(req, res, next) {
+	var items = []
+	User.findById(req.user._id,function(err,user){
+		if(err)  {
+			console.log("Some kind of error fetching user",err)
+			res.sendStatus(400,err)
+		}
+		
+		// Get Individual and merge
+		if(req.query.type  == "maker") {
+			maker.findById(req.query.id, function(err,obj) {
+				console.log("/template/maker",obj)
+				if(err)  {
+					console.log("Some kind of error fetching template maker",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(obj)
+			})
+		} else if(req.query.type  == "seeker") {
+			grant.findById(req.query.id, function(err,obj) {
+				console.log("/template/seeker",obj)
+				if(err) {
+					console.log("Some kind of error fetching template seeker",err)
+					res.sendStatus(400,err)
+				}
+				res.setHeader('Content-Type', 'application/json');	
+		    	res.status(200).send(obj)
+			})
+		}
+	})
+})
+
+
+//////////////////////////////////////
+/////////////  OrgInfo  //////////////
 //////////////////////////////////////
 
 
