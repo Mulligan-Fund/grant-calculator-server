@@ -244,12 +244,27 @@ app.put('/grant/:id?', ensureAuthenticated, function(req,res,next) {
 			} else {
 
 			console.log("Attempt to insert",req.body)
-			schema.findByIdAndUpdate(req.body._id ,req.body,
-	          {upsert: false, new: true},
-	          function(err,grant){
+			// schema.findByIdAndUpdate(req.body._id ,req.body,
+	  //         {upsert: false, new: true},
+	  //         function(err,grant){
+	  //          if(err) console.log("Updated form",err,grant)
+	  //               res.setHeader('Content-Type', 'application/json');	
+			// 		res.send(JSON.stringify(grant))
+	  //       })
+
+	  		schema.findById(req.body._id, {lean: true}, function(err,grant){
 	           if(err) console.log("Updated form",err,grant)
-	                res.setHeader('Content-Type', 'application/json');	
-					res.send(JSON.stringify(grant))
+	             grant.set(req.body)
+             	 for (var i = 0; i < grant.length; i++) {
+             	 	console.log("mod",grant[i].isArray(),grant[i].key)
+	             	if(grant[i].isArray()) grant.markModified(grant[i].key);
+	             }
+		         grant.save(function() {
+		         	res.setHeader('Content-Type', 'application/json');	
+				    res.send(JSON.stringify(grant))	
+		         });
+
+	             
 	        })
 			
 			}
