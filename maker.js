@@ -11,6 +11,7 @@ var grantmakerSchema = new Schema({
 	number_of_grants : Number,
 	amount_of_grants : Number,
 	number_of_applications : Number,
+	template : String,
 	gm_invited_or_unsolicited : String,
 	gm_type_of_application : String,
 	gm_length_of_award : Number,

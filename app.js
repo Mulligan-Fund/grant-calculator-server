@@ -408,7 +408,7 @@ app.get('/template/:type', ensureAuthenticated, function(req, res, next) {
 		    	res.status(200).send(list)
 			})
 		} else if(req.params.type  == "seeker") {
-			grant.find({userid:req.user._id,template:true}, function(err,list) {
+			schema.find({userid:req.user._id,template:true}, function(err,list) {
 				console.log("/template/seeker",list)
 				if(err)  {
 					console.log("Some kind of error fetching template seeker",err)
