@@ -244,14 +244,6 @@ app.put('/grant/:id?', ensureAuthenticated, function(req,res,next) {
 			} else {
 
 			console.log("Attempt to insert",req.body)
-			// schema.findByIdAndUpdate(req.body._id ,req.body,
-	  //         {upsert: false, new: true},
-	  //         function(err,grant){
-	  //          if(err) console.log("Updated form",err,grant)
-	  //               res.setHeader('Content-Type', 'application/json');	
-			// 		res.send(JSON.stringify(grant))
-	  //       })
-
 	  		schema.findById(req.body._id, {lean: true}, function(err,grant){
 	           if(err) console.log("Updated form",err,grant)
 	             grant.set(req.body)
@@ -348,7 +340,7 @@ app.put('/maker/:id?', ensureAuthenticated, function(req,res,next) {
 	    	res.status(200).send(grant)
 		})
 		
-	} else {
+		} else{
 		User.findById(req.user._id,function(err,user){
 			console.log("/maker user",user)
 			if(err)  {
@@ -360,18 +352,49 @@ app.put('/maker/:id?', ensureAuthenticated, function(req,res,next) {
 				res.sendStatus(400,err)	
 			} else {
 
-			console.log("Attempt to insert maker",req.body)
-			maker.findByIdAndUpdate(req.body._id ,req.body,
-	          {upsert: false, new: true},
-	          function(err,grant){
-	           if(err) console.log("Err Updated grantmaker",err,grant)
-	                res.setHeader('Content-Type', 'application/json');	
-					res.send(JSON.stringify(grant))
+			console.log("Attempt to insert",req.body)
+	  		maker.findById(req.body._id, {lean: true}, function(err,grant){
+	           if(err) console.log("Updated form",err,grant)
+	             grant.set(req.body)
+             	 for (var i = 0; i < grant.length; i++) {
+             	 	console.log("mod",grant[i].isArray(),grant[i].key)
+	             	if(grant[i].isArray()) grant.markModified(grant[i].key);
+	             }
+		         grant.save(function() {
+		         	res.setHeader('Content-Type', 'application/json');	
+				    res.send(JSON.stringify(grant))	
+		         });
+
+	             
 	        })
 			
 			}
 		}) 
 	}
+
+	// } else {
+	// 	User.findById(req.user._id,function(err,user){
+	// 		console.log("/maker user",user)
+	// 		if(err)  {
+	// 			console.log("Some kind of error fetching pins",err)
+	// 			res.sendStatus(400,err)
+	// 		}
+
+	// 		if(user.username == null) {
+	// 			res.sendStatus(400,err)	
+	// 		} else {
+
+	// 		console.log("Attempt to insert maker",req.body)
+	// 		maker.findByIdAndUpdate(req.body._id ,req.body,
+	//           {upsert: false, new: true},
+	//           function(err,grant){
+	//            if(err) console.log("Err Updated grantmaker",err,grant)
+	//                 res.setHeader('Content-Type', 'application/json');	
+	// 				res.send(JSON.stringify(grant))
+	//         })
+			
+	// 		}
+	// 	}) 
 })
 
 app.delete('/maker/:id?', ensureAuthenticated, function(req,res,next) {
