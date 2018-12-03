@@ -201,115 +201,7 @@ app.put("/user", ensureAuthenticated, function(req, res, next) {
 });
 
 //////////////////////////////////////
-/////////////  Grantseeker  ////////////////
-//////////////////////////////////////
-
-// app.get("/grant/:id?", ensureAuthenticated, function(req, res, next) {
-// 	var items = [];
-// 	User.findById(req.user._id, function(err, user) {
-// 		if (err) {
-// 			console.log("Some kind of error fetching user", err);
-// 			res.sendStatus(400, err);
-// 		}
-// 		if (req.query.list) {
-// 			schema.find({ userid: req.user._id }, function(err, list) {
-// 				console.log("/grant list", list);
-// 				if (err) {
-// 					console.log("Some kind of error fetching grant", err);
-// 					res.sendStatus(400, err);
-// 				}
-// 				res.setHeader("Content-Type", "application/json");
-// 				res.status(200).send(list);
-// 			});
-// 		} else {
-// 			schema.findById(req.query.id, function(err, grant) {
-// 				console.log("/grant grant", grant);
-// 				if (err) {
-// 					console.log("Some kind of error fetching grant", err);
-// 					res.sendStatus(400, err);
-// 				}
-// 				res.setHeader("Content-Type", "application/json");
-// 				res.status(200).send(grant);
-// 			});
-// 		}
-// 	});
-// });
-//
-// app.put("/grant/:id?", ensureAuthenticated, function(req, res, next) {
-// 	var items = [];
-// 	console.log("req.user for /items", req.user);
-//
-// 	// Is this a new grant?
-// 	if (req.body._id == null) {
-// 		console.log("Looks like a new grant");
-// 		grant = new schema();
-// 		grant.userid = req.user.id;
-// 		for (var i in req.body) {
-// 			// console.log(i,typeof i)
-// 			grant[i] = req.body[i];
-// 		}
-// 		grant.save(function(err, grant) {
-// 			if (err) console.log("Error creating grant", err, grant);
-// 			res.setHeader("Content-Type", "application/json");
-// 			res.status(200).send(grant);
-// 		});
-// 	} else {
-// 		User.findById(req.user._id, function(err, user) {
-// 			console.log("/grant user", user);
-// 			if (err) {
-// 				console.log("Some kind of error fetching pins", err);
-// 				res.sendStatus(400, err);
-// 			}
-//
-// 			if (user.username == null) {
-// 				res.sendStatus(400, err);
-// 			} else {
-// 				console.log("Attempt to insert", req.body);
-// 				schema.findById(req.body._id, { lean: true }, function(
-// 					err,
-// 					grant
-// 				) {
-// 					if (err) console.log("Updated form", err, grant);
-// 					grant.set(req.body);
-// 					for (var i = 0; i < grant.length; i++) {
-// 						console.log("mod", grant[i].isArray(), grant[i].key);
-// 						if (grant[i].isArray())
-// 							grant.markModified(grant[i].key);
-// 					}
-// 					grant.save(function() {
-// 						res.setHeader("Content-Type", "application/json");
-// 						res.send(JSON.stringify(grant));
-// 					});
-// 				});
-// 			}
-// 		});
-// 	}
-// });
-//
-// app.delete("/grant/:id?", ensureAuthenticated, function(req, res, next) {
-// 	User.findById(req.user._id, function(err, user) {
-// 		console.log("DEL /grant user", user);
-// 		if (err) {
-// 			console.log("Some kind of error fetching pins", err);
-// 			res.sendStatus(400, err);
-// 		}
-//
-// 		if (user.username == null) {
-// 			res.sendStatus(400, err);
-// 		} else {
-// 			console.log("Searching to DEL grant", req.body.id);
-// 			schema.findById(req.body.id).remove(function(err, o) {
-// 				if (err) console.log("Err Updated obj", err);
-// 				console.log("DEL /object", o);
-// 				res.setHeader("Content-Type", "application/json");
-// 				res.send(o);
-// 			});
-// 		}
-// 	});
-// });
-
-//////////////////////////////////////
-/////////////  GrantMaker  ////////////////
+/////////////  Grants  ////////////////
 //////////////////////////////////////
 
 app.get("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
@@ -437,50 +329,40 @@ app.delete("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
 
 app.get("/template/:type", ensureAuthenticated, function(req, res, next) {
 	var items = [];
+	var model = {};
+	if (req.params.type == "maker") {
+		model = maker;
+	} else {
+		model = schema;
+	}
 	User.findById(req.user._id, function(err, user) {
 		if (err) {
 			console.log("Some kind of error fetching user", err);
 			res.sendStatus(400, err);
 		}
 		console.log("Template search:", req.params.type);
-		// Get List of Templates
-		if (req.params.type == "maker") {
-			maker.find({ userid: req.user._id, template: true }, function(
-				err,
-				list
-			) {
-				console.log("/template/maker", list);
-				if (err) {
-					console.log(
-						"Some kind of error fetching template maker",
-						err
-					);
-					res.sendStatus(400, err);
-				}
-				res.setHeader("Content-Type", "application/json");
-				res.status(200).send(list);
-			});
-		} else if (req.params.type == "seeker") {
-			schema.find({ userid: req.user._id, template: true }, function(
-				err,
-				list
-			) {
-				console.log("/template/seeker", list);
-				if (err) {
-					console.log(
-						"Some kind of error fetching template seeker",
-						err
-					);
-					res.sendStatus(400, err);
-				}
-				res.setHeader("Content-Type", "application/json");
-				res.status(200).send(list);
-			});
-		}
+		model.find({ userid: req.user._id, template: true }, function(
+			err,
+			list
+		) {
+			console.log("/template/maker", list);
+			if (err) {
+				console.log("Some kind of error fetching template maker", err);
+				res.sendStatus(400, err);
+			}
+			res.setHeader("Content-Type", "application/json");
+			res.status(200).send(list);
+		});
 	});
 });
 
 app.get("/template/:type/:id?", ensureAuthenticated, function(req, res, next) {
+	var model = {};
+	if (req.params.type == "maker") {
+		model = maker;
+	} else {
+		model = schema;
+	}
 	var items = [];
 	User.findById(req.user._id, function(err, user) {
 		if (err) {
@@ -490,24 +372,11 @@ app.get("/template/:type/:id?", ensureAuthenticated, function(req, res, next) {
 
 		// Get Individual and merge
 		if (req.query.type == "maker") {
-			maker.findById(req.query.id, function(err, obj) {
+			model.findById(req.query.id, function(err, obj) {
 				console.log("/template/maker", obj);
 				if (err) {
 					console.log(
 						"Some kind of error fetching template maker",
-						err
-					);
-					res.sendStatus(400, err);
-				}
-				res.setHeader("Content-Type", "application/json");
-				res.status(200).send(obj);
-			});
-		} else if (req.query.type == "seeker") {
-			grant.findById(req.query.id, function(err, obj) {
-				console.log("/template/seeker", obj);
-				if (err) {
-					console.log(
-						"Some kind of error fetching template seeker",
 						err
 					);
 					res.sendStatus(400, err);
