@@ -52,13 +52,16 @@ app.use(corsSettings);
 app.use(methodOverride());
 
 // Mongoose
-var schema = require("./schema.js");
-var maker = require("./maker.js");
-var profile = require("./orginfo.js");
-var User = require("./user.js");
-var Obj = require("./object.js");
-var Role = require("./title.js");
+var schema = require("./schema/schema.js");
+var maker = require("./schema/maker.js");
+var profile = require("./schema/orginfo.js");
+var User = require("./schema/user.js");
+var Obj = require("./schema/object.js");
+var Role = require("./schema/title.js");
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/grantcalc"); //process.env.MONGODB_URI ||
+
+var bs = require("./helpers/bootstrap.js"); // Bootstraps database
+bs.init(mongoose, Role);
 
 passport.serializeUser(function(user, done) {
 	console.log("serializeUser");
