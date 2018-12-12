@@ -203,7 +203,7 @@ app.post("/forgot/:username", async function(req, res, next) {
 			String(
 				heroku
 					? "https://mulligan-fund.github.io"
-					: "http://127.0.0.1:3000"
+					: "http://127.0.0.1:4000"
 			) +
 			"/reset/" +
 			token;
