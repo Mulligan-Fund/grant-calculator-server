@@ -1,5 +1,7 @@
 var express = require("express"),
 	connect = require("connect"),
+	crypto = require("crypto"),
+	moment = require("moment"),
 	sessions = require("express-session"),
 	morgan = require("morgan"),
 	bodyParser = require("body-parser"),
@@ -10,6 +12,7 @@ var express = require("express"),
 	passport = require("passport"),
 	LocalStrategy = require("passport-local"),
 	mongoose = require("mongoose"),
+	passportLocalMongoose = require("passport-local-mongoose"),
 	cors = require("cors");
 
 var heroku = process.env.HEROKU_TRUE || false;
@@ -29,7 +32,6 @@ var corsSettings = cors({
 });
 
 app.set("view engine", "jade");
-
 app.use(function(req, res, next) {
 	res.header(
 		"Access-Control-Allow-Origin",
@@ -174,6 +176,113 @@ app.get("/logout", function(req, res) {
 	req.logout();
 	res.setHeader("Content-Type", "application/json");
 	res.send(JSON.stringify("Logout"));
+});
+
+// Pulled from stack overflow
+// https://stackoverflow.com/questions/45656642/trouble-with-password-reset-with-passport-local-mongoose
+// Get Reset token
+app.post("/forgot/:username", async function(req, res, next) {
+	console.log("Running Forgot", req.params.username);
+	try {
+		var buf = await crypto.randomBytes(20);
+		var token = buf.toString("hex");
+		var username = req.params.username;
+		var user = await User.findOneAndUpdate(
+			{ username },
+			{
+				resetPasswordToken: token,
+				resetPasswordExpires: moment()
+					.add(1, "hour")
+					.toDate()
+			}
+		);
+		if (!user) {
+			console.log("No such user");
+		}
+		var pathToToken =
+			String(
+				heroku
+					? "https://mulligan-fund.github.io"
+					: "http://127.0.0.1:3000"
+			) +
+			"/reset/" +
+			token;
+		console.log(
+			// sendEmail()
+			username,
+			"Grant Calc Password Reset",
+			"You are receiving this because you have requested the reset of the password for your account." +
+				"Please click on the following link, or paste this into your browser to complete the process: " +
+				pathToToken +
+				"  If you did not request this, please ignore this email and your password will remain unchanged."
+		);
+		res.status(200).json(pathToToken);
+	} catch (error) {
+		console.error(error);
+		// handleError(res, error.message, "/forgot");
+	}
+});
+
+// Reset the actual thing
+app.post("/reset/:token", async function(req, res, next) {
+	console.log("Running Reset", req.params.token, req.query.password);
+	try {
+		var resetPasswordToken = req.params.token;
+		var password = req.query.password;
+		var user = await User.findOneAndUpdate(
+			{
+				resetPasswordToken,
+				resetPasswordExpires: { $gt: Date.now() }
+			},
+			{
+				resetPasswordToken: undefined,
+				resetPasswordExpires: undefined
+			}
+		);
+		// if (!user) {
+		// 	res.status(400).json("No user");
+		// 	return;
+		// }
+		console.log("Found user to reset", user);
+		// user.setPassword(password, (error, user) => {
+		// 	if (error) {
+		// 		return next(error);
+		// 	}
+		// user.password =
+		user.set({
+			password: password.toLowerCase()
+		});
+		user.markModified("password");
+		user.save((err, user) => {
+			if (err) {
+				return next(error);
+			} else {
+				res.status(200).json("Reset password " + user.username);
+			}
+			// passport.authenticate("local", function(error, user, info) {
+			// 	console.log("error", error);
+			// 	console.log("user", user);
+			// 	console.log("info", info);
+			// 	if (error) {
+			// 		return next(error);
+			// 	}
+			// 	if (!user) {
+			// 		return next("No user");
+			// 	}
+			// 	req.logIn(user, function(error) {
+			// 		if (error) {
+			// 			return next(error);
+			// 		}
+			// 		return res.redirect("/");
+			// 	});
+			// })(req, res, next);
+		});
+		// });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json("failure " + error);
+		// handleError(res, error.message, "/reset");
+	}
 });
 
 //////////////////////////////////
