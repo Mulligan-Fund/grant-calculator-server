@@ -180,6 +180,25 @@ app.get("/logout", function(req, res) {
 
 // Pulled from stack overflow
 // https://stackoverflow.com/questions/45656642/trouble-with-password-reset-with-passport-local-mongoose
+// Email Function
+function sendEmail(email, link) {
+	const sgMail = require("@sendgrid/mail");
+	sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+	const msg = {
+		to: email,
+		from: "no-reply@netgrant.org",
+		subject: "Forgot your password?",
+		text:
+			"Hey, did you forgot your password? Click this link to reset it: " +
+			link,
+		html:
+			'<strong>Hey guys</strong><br><p>Hey, did you forgot your password? Click this link to reset it</p><br><a href="' +
+			link +
+			'">Click this link</a>'
+	};
+	sgMail.send(msg);
+}
+
 // Get Reset token
 app.post("/forgot/:username", async function(req, res, next) {
 	console.log("Running Forgot", req.params.username);
@@ -207,8 +226,8 @@ app.post("/forgot/:username", async function(req, res, next) {
 			) +
 			"/reset/" +
 			token;
-		console.log(
-			// sendEmail()
+		// console.log(
+		sendEmail(
 			username,
 			"Grant Calc Password Reset",
 			"You are receiving this because you have requested the reset of the password for your account." +
