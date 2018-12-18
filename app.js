@@ -200,12 +200,15 @@ function sendEmail(email, link, cb) {
 			'">Click this link</a>'
 	};
 
-	postmarkClient.sendEmail({
-		From: "info@stupidsystems.com",
-		To: msg.to,
-		Subject: msg.subject,
-		TextBody: msg.text
-	});
+	postmarkClient.sendEmail(
+		{
+			From: "info@stupidsystems.com",
+			To: msg.to,
+			Subject: msg.subject,
+			TextBody: msg.text
+		},
+		cb
+	);
 }
 
 // Get Reset token
@@ -231,9 +234,9 @@ app.post("/forgot/:username", async function(req, res, next) {
 			String(
 				heroku
 					? "https://mulligan-fund.github.io"
-					: "http://127.0.0.1:4000"
+					: "http://127.0.0.1:4000/grant-calculator"
 			) +
-			"/reset/" +
+			"/reset/?token=" +
 			token;
 		sendEmail(username, pathToToken, function(err, status) {
 			if (err) res.status(500).json("error:" + err);
