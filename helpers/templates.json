@@ -1,0 +1,725 @@
+{
+    "_id": {
+        "$oid": "5c1966be7a59ba0004189144"
+    },
+    "userid": {
+        "$oid": "5a3ee8c853c88800040c7972"
+    },
+    "gs_additional_other": [],
+    "gs_reporting_other": [],
+    "monitoring_qs": [
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 0.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "draft_report": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 2
+        },
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 2
+        }
+    ],
+    "modifications": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 2
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 5
+        }
+    ],
+    "prepare_financials": [
+        {
+            "person": {
+                "$oid": "5c19557a7a59ba000418913d"
+            },
+            "hours": 1
+        }
+    ],
+    "collect_data": [],
+    "report_requirements": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.25
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 0.25
+        }
+    ],
+    "gs_compliance_other": [],
+    "post_grant_comm": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        }
+    ],
+    "letter_signing": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "follow_up_qs": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "gs_applications_other": [],
+    "format_app": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        }
+    ],
+    "draft_proposal": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1
+        }
+    ],
+    "prepare_budget": [
+        {
+            "person": {
+                "$oid": "5c19557a7a59ba000418913d"
+            },
+            "hours": 0.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 0.5
+        }
+    ],
+    "gather_docs": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1
+        }
+    ],
+    "pre_proposal_mtg": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 0.5
+        }
+    ],
+    "pre_proposal_comm": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "proposal_requirements": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        }
+    ],
+    "draft_loi": [],
+    "pre_loi_comm": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "loi_requirements": [],
+    "preliminary_rsch_people": [],
+    "site_visit": [
+        {
+            "person": {
+                "$oid": "5c1955267a59ba0004189139"
+            },
+            "hours": 1.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 1.5
+        }
+    ],
+    "__v": 0,
+    "funder": "Under 50K Project Renewal",
+    "template": "true",
+    "amount": 50000,
+    "probability": 90,
+    "new_or_renewal": "Renewal",
+    "type_of_support": "Program development",
+    "length_of_award": 1
+},
+{
+    "_id": {
+        "$oid": "5c1963197a59ba0004189143"
+    },
+    "userid": {
+        "$oid": "5a3ee8c853c88800040c7972"
+    },
+    "gs_additional_other": [],
+    "gs_reporting_other": [],
+    "monitoring_qs": [
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 0.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "draft_report": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        }
+    ],
+    "modifications": [],
+    "prepare_financials": [],
+    "collect_data": [],
+    "report_requirements": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 0.5
+        }
+    ],
+    "gs_compliance_other": [],
+    "post_grant_comm": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        }
+    ],
+    "letter_signing": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "follow_up_qs": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 1
+        }
+    ],
+    "gs_applications_other": [],
+    "format_app": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 2
+        }
+    ],
+    "draft_proposal": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1
+        }
+    ],
+    "prepare_budget": [],
+    "gather_docs": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5a55232e8768ba00044b9c2f"
+            },
+            "hours": 0.5
+        }
+    ],
+    "pre_proposal_mtg": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.25
+        },
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.25
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 0.25
+        }
+    ],
+    "pre_proposal_comm": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "proposal_requirements": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        }
+    ],
+    "draft_loi": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 0.5
+        }
+    ],
+    "pre_loi_comm": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "loi_requirements": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        }
+    ],
+    "preliminary_rsch_people": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        }
+    ],
+    "site_visit": [
+        {
+            "person": {
+                "$oid": "5c1955267a59ba0004189139"
+            },
+            "hours": 1.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 1.5
+        }
+    ],
+    "__v": 0,
+    "funder": "50000 General First Time",
+    "past_grant": "Haven't Recevied Prior Grant",
+    "template": "true",
+    "amount": 50000,
+    "probability": 50,
+    "type_of_support": "General support",
+    "length_of_award": 1
+},
+{
+    "_id": {
+        "$oid": "5c19547d7a59ba0004189138"
+    },
+    "userid": {
+        "$oid": "5a3ee8c853c88800040c7972"
+    },
+    "gs_additional_other": [],
+    "gs_reporting_other": [],
+    "monitoring_qs": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 0.5
+        }
+    ],
+    "draft_report": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 2
+        },
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 2
+        }
+    ],
+    "modifications": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 2
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 5
+        }
+    ],
+    "prepare_financials": [
+        {
+            "person": {
+                "$oid": "5c19557a7a59ba000418913d"
+            },
+            "hours": 2
+        }
+    ],
+    "collect_data": [
+        {
+            "person": {
+                "$oid": "5c19557a7a59ba000418913d"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 2
+        }
+    ],
+    "report_requirements": [
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 1
+        }
+    ],
+    "gs_compliance_other": [],
+    "post_grant_comm": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        }
+    ],
+    "letter_signing": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "follow_up_qs": [
+        {
+            "hours": 0
+        }
+    ],
+    "gs_applications_other": [],
+    "format_app": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 2
+        }
+    ],
+    "draft_proposal": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 2
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 2
+        }
+    ],
+    "prepare_budget": [
+        {
+            "person": {
+                "$oid": "5c19557a7a59ba000418913d"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1
+        }
+    ],
+    "gather_docs": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 2
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 2
+        }
+    ],
+    "pre_proposal_mtg": [
+        null,
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1
+        },
+        {
+            "hours": 0
+        }
+    ],
+    "pre_proposal_comm": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "proposal_requirements": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        }
+    ],
+    "draft_loi": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        },
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1
+        }
+    ],
+    "pre_loi_comm": [
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 0.5
+        }
+    ],
+    "loi_requirements": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 0.5
+        }
+    ],
+    "preliminary_rsch_people": [
+        {
+            "person": {
+                "$oid": "5c19553f7a59ba000418913a"
+            },
+            "hours": 1
+        }
+    ],
+    "site_visit": [
+        {
+            "person": {
+                "$oid": "5c1955677a59ba000418913c"
+            },
+            "hours": 1.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955527a59ba000418913b"
+            },
+            "hours": 1.5
+        },
+        {
+            "person": {
+                "$oid": "5c1955267a59ba0004189139"
+            },
+            "hours": 1.5
+        }
+    ],
+    "__v": 0,
+    "funder": "Under 50k Project First Time",
+    "past_grant": "Haven't Recevied Prior Grant",
+    "template": "true",
+    "amount": 50000,
+    "probability": 50,
+    "type_of_support": "Program development",
+    "program_name": ""
+},
