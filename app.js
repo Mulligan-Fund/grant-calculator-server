@@ -16,8 +16,6 @@ var express = require("express"),
 	postmark = require("postmark"),
 	cors = require("cors");
 
-const sgMail = require("@sendgrid/mail");
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 var postmarkClient = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
 
 var heroku = process.env.HEROKU_TRUE || false;
@@ -144,6 +142,31 @@ function ensureAuthenticated(req, res, next) {
 	}
 }
 
+function sendEmail(email, link, cb) {
+	const msg = {
+		to: email,
+		from: "no-reply@netgrant.org",
+		subject: "Forgot your password?",
+		text:
+			"Hey, did you forgot your password? Click this link to reset it: " +
+			link,
+		html:
+			'<strong>Hey guys</strong><br><p>Hey, did you forgot your password? Click this link to reset it</p><br><a href="' +
+			link +
+			'">Click this link</a>'
+	};
+
+	postmarkClient.sendEmail(
+		{
+			From: "info@stupidsystems.com",
+			To: msg.to,
+			Subject: msg.subject,
+			TextBody: msg.text
+		},
+		cb
+	);
+}
+
 app.options(
 	"*",
 	cors({
@@ -182,34 +205,6 @@ app.get("/logout", function(req, res) {
 	res.setHeader("Content-Type", "application/json");
 	res.send(JSON.stringify("Logout"));
 });
-
-// Pulled from stack overflow
-// https://stackoverflow.com/questions/45656642/trouble-with-password-reset-with-passport-local-mongoose
-// Email Function
-function sendEmail(email, link, cb) {
-	const msg = {
-		to: email,
-		from: "no-reply@netgrant.org",
-		subject: "Forgot your password?",
-		text:
-			"Hey, did you forgot your password? Click this link to reset it: " +
-			link,
-		html:
-			'<strong>Hey guys</strong><br><p>Hey, did you forgot your password? Click this link to reset it</p><br><a href="' +
-			link +
-			'">Click this link</a>'
-	};
-
-	postmarkClient.sendEmail(
-		{
-			From: "info@stupidsystems.com",
-			To: msg.to,
-			Subject: msg.subject,
-			TextBody: msg.text
-		},
-		cb
-	);
-}
 
 // Get Reset token
 app.post("/forgot/:username", async function(req, res, next) {
