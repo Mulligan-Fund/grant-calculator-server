@@ -477,13 +477,20 @@ app.get("/template/:type", ensureAuthenticated, function(req, res, next) {
 			err,
 			list
 		) {
-			console.log("/template/maker", list);
-			if (err) {
-				console.log("Some kind of error fetching template maker", err);
-				res.sendStatus(400, err);
-			}
-			res.setHeader("Content-Type", "application/json");
-			res.status(200).send(list);
+			//also fetch global
+			model.find({ globaltemplate: true }, function(err, globallist) {
+				console.log("/template/maker/global", globallist);
+				if (err) {
+					console.log(
+						"Some kind of error fetching template maker",
+						err
+					);
+					res.sendStatus(400, err);
+				}
+				returnArray = [...list, ...globallist];
+				res.setHeader("Content-Type", "application/json");
+				res.status(200).send(returnArray);
+			});
 		});
 	});
 });
