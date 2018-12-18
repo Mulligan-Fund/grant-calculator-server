@@ -18,7 +18,7 @@ var express = require("express"),
 
 const sgMail = require("@sendgrid/mail");
 // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-var client = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
+var postmarkClient = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
 
 var heroku = process.env.HEROKU_TRUE || false;
 
@@ -200,9 +200,9 @@ function sendEmail(email, link, cb) {
 			'">Click this link</a>'
 	};
 
-	client.sendEmail({
+	postmarkClient.sendEmail({
 		From: "info@stupidsystems.com",
-		To: msg.to
+		To: msg.to,
 		Subject: msg.subject,
 		TextBody: msg.text
 	});
