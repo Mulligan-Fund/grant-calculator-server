@@ -13,7 +13,12 @@ var express = require("express"),
 	LocalStrategy = require("passport-local"),
 	mongoose = require("mongoose"),
 	passportLocalMongoose = require("passport-local-mongoose"),
+	postmark = require("postmark"),
 	cors = require("cors");
+
+const sgMail = require("@sendgrid/mail");
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+var client = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
 
 var heroku = process.env.HEROKU_TRUE || false;
 
@@ -181,9 +186,7 @@ app.get("/logout", function(req, res) {
 // Pulled from stack overflow
 // https://stackoverflow.com/questions/45656642/trouble-with-password-reset-with-passport-local-mongoose
 // Email Function
-function sendEmail(email, link) {
-	const sgMail = require("@sendgrid/mail");
-	sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+function sendEmail(email, link, cb) {
 	const msg = {
 		to: email,
 		from: "no-reply@netgrant.org",
@@ -196,7 +199,13 @@ function sendEmail(email, link) {
 			link +
 			'">Click this link</a>'
 	};
-	sgMail.send(msg);
+
+	client.sendEmail({
+		From: "info@stupidsystems.com",
+		To: msg.to
+		Subject: msg.subject,
+		TextBody: msg.text
+	});
 }
 
 // Get Reset token
@@ -226,16 +235,10 @@ app.post("/forgot/:username", async function(req, res, next) {
 			) +
 			"/reset/" +
 			token;
-		// console.log(
-		sendEmail(
-			username,
-			"Grant Calc Password Reset",
-			"You are receiving this because you have requested the reset of the password for your account." +
-				"Please click on the following link, or paste this into your browser to complete the process: " +
-				pathToToken +
-				"  If you did not request this, please ignore this email and your password will remain unchanged."
-		);
-		res.status(200).json(pathToToken);
+		sendEmail(username, pathToToken, function(err, status) {
+			if (err) res.status(500).json("error:" + err);
+			else res.status(200).json(pathToToken);
+		});
 	} catch (error) {
 		console.error(error);
 		// handleError(res, error.message, "/forgot");
