@@ -473,18 +473,17 @@ app.get("/template/:type", ensureAuthenticated, function(req, res, next) {
 			res.sendStatus(400, err);
 		}
 		console.log("Template search:", req.params.type);
+		// Fetch local
 		model.find({ userid: req.user._id, template: true }, function(
 			err,
 			list
 		) {
 			//also fetch global
 			model.find({ globaltemplate: true }, function(err, globallist) {
+				console.log("/template/maker/user", list);
 				console.log("/template/maker/global", globallist);
 				if (err) {
-					console.log(
-						"Some kind of error fetching template maker",
-						err
-					);
+					console.log("Some kind of error fetching templates", err);
 					res.sendStatus(400, err);
 				}
 				returnArray = [...list, ...globallist];
