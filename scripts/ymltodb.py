@@ -1,5 +1,7 @@
 import yaml,pprint
 
+pathToClientRepo = "../../grantcalc"
+
 def generateGrantseekerSchema(l):
 	target = ""
 
@@ -9,7 +11,7 @@ def generateGrantseekerSchema(l):
 	lines.append("var personHourSchema = new Schema({_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number});\n")
 	lines.append("var grantseekerSchema = new Schema({\n")
 	lines.append("\tgrantid: Schema.Types.ObjectId,\n")
-	lines.append("\tuserid: Schema.Types.ObjectId,\n")	
+	lines.append("\tuserid: Schema.Types.ObjectId,\n")
 	lines.append("\ttemplate: Schema.Types.Boolean,\n")
 	lines.append("\tglobaltemplate: Schema.Types.Boolean,\n")
 
@@ -18,9 +20,9 @@ def generateGrantseekerSchema(l):
 
 	lines.append("});\n\n")
 	lines.append("module.exports = mongoose.model('grant', grantseekerSchema);\n")
-	
 
-	fo = open("schema.js", "w")
+
+	fo = open("../schema/schema.js", "w")
 	fo.writelines( lines )
 	fo.close()
 
@@ -36,15 +38,15 @@ def generateGrantmakerSchema(l):
 	lines.append("\tuserid: Schema.Types.ObjectId,\n")
 	lines.append("\ttemplate: Schema.Types.Boolean,\n")
 	lines.append("\tglobaltemplate: Schema.Types.Boolean,\n")
-	
+
 	for i in l:
 		lines.append("\t"+i["field"]+" : "+i["type"]+",\n")
 
 	lines.append("});\n\n")
 	lines.append("module.exports = mongoose.model('maker', grantmakerSchema);\n")
-	
 
-	fo = open("maker.js", "w")
+
+	fo = open("../schema/maker.js", "w")
 	fo.writelines( lines )
 	fo.close()
 
@@ -64,9 +66,9 @@ def generateOrgInfoSchema(l):
 
 	lines.append("});\n\n")
 	lines.append("module.exports = mongoose.model('orginfo', orginfoSchema);\n")
-	
 
-	fo = open("orginfo.js", "w")
+
+	fo = open("../schema/orginfo.js", "w")
 	fo.writelines( lines )
 	fo.close()
 
@@ -74,7 +76,7 @@ lo = []
 go = []
 to = []
 
-with open("../grantcalc/_data/grantseeker.yml", 'r') as stream:
+with open(pathToClientRepo + "/_data/grantseeker.yml", 'r') as stream:
     out = yaml.load(stream)
 
     for page in out:
@@ -94,13 +96,13 @@ with open("../grantcalc/_data/grantseeker.yml", 'r') as stream:
 	    		# 	p = {"field": quest['dbfield']+'_hour', "type": "Number"}
 	    		# 	lo.append(p)
 	    		# 	print p
-	    		
+
 		    	# print quest['dbfield']
 generateGrantseekerSchema(lo)
 
-with open("../grantcalc/_data/grantmaker.yml", 'r') as stream:
+with open(pathToClientRepo+"/_data/grantmaker.yml", 'r') as stream:
     out = yaml.load(stream)
-    
+
     for page in out:
 	    for sect in page["sections"]:
 	    	for quest in sect["questions"]:
@@ -117,9 +119,9 @@ with open("../grantcalc/_data/grantmaker.yml", 'r') as stream:
 generateGrantmakerSchema(go)
 
 
-with open("../grantcalc/_data/orginfo.yml", 'r') as stream:
+with open(pathToClientRepo+"/_data/orginfo.yml", 'r') as stream:
     out = yaml.load(stream)
-    
+
     for page in out:
 	    for sect in page["sections"]:
 	    	for quest in sect["questions"]:
