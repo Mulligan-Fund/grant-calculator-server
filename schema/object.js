@@ -1,12 +1,13 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var objectSchema = new Schema({
-	// _id: Schema.Types.ObjectId,
-	userid: Schema.Types.ObjectId,
-	name : String,
-	title : Schema.Types.ObjectId,
-	salary : Number,
-	delete : Boolean
+  // _id: Schema.Types.ObjectId,
+  userid: Schema.Types.ObjectId,
+  name: String,
+  title: Schema.Types.ObjectId,
+  salary: Number,
+  delete: Boolean,
+  global: Boolean
 });
 
-module.exports = mongoose.model('object', objectSchema);
+module.exports = mongoose.model("object", objectSchema);
