@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var personHourSchema = new Schema({_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number});
+var personHourSchema = new Schema({ _id: Schema.Types.ObjectId, person: { type: Schema.Types.ObjectId, required: true }, hours: { type: Number, required: true } });
 var orginfoSchema = new Schema({
 	grantid: Schema.Types.ObjectId,
 	userid: Schema.Types.ObjectId,

@@ -8,7 +8,7 @@ def generateGrantseekerSchema(l):
 	lines = []
 	lines.append("var mongoose = require('mongoose');\n")
 	lines.append("var Schema = mongoose.Schema;\n")
-	lines.append("var personHourSchema = new Schema({_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number});\n")
+	lines.append("var personHourSchema = new Schema({ _id: Schema.Types.ObjectId, person: { type: Schema.Types.ObjectId, required: true }, hours: { type: Number, required: true } });\n")
 	lines.append("var grantseekerSchema = new Schema({\n")
 	lines.append("\tgrantid: Schema.Types.ObjectId,\n")
 	lines.append("\tuserid: Schema.Types.ObjectId,\n")
@@ -32,7 +32,7 @@ def generateGrantmakerSchema(l):
 	lines = []
 	lines.append("var mongoose = require('mongoose');\n")
 	lines.append("var Schema = mongoose.Schema;\n")
-	lines.append("var personHourSchema = new Schema({_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number});\n")
+	lines.append("var personHourSchema = new Schema({ _id: Schema.Types.ObjectId, person: { type: Schema.Types.ObjectId, required: true }, hours: { type: Number, required: true } });\n")
 	lines.append("var grantmakerSchema = new Schema({\n")
 	lines.append("\tgrantid: Schema.Types.ObjectId,\n")
 	lines.append("\tuserid: Schema.Types.ObjectId,\n")
@@ -56,7 +56,7 @@ def generateOrgInfoSchema(l):
 	lines = []
 	lines.append("var mongoose = require('mongoose');\n")
 	lines.append("var Schema = mongoose.Schema;\n")
-	lines.append("var personHourSchema = new Schema({_id: Schema.Types.ObjectId, person: Schema.Types.ObjectId, hours: Number});\n")
+	lines.append("var personHourSchema = new Schema({ _id: Schema.Types.ObjectId, person: { type: Schema.Types.ObjectId, required: true }, hours: { type: Number, required: true } });\n")
 	lines.append("var orginfoSchema = new Schema({\n")
 	lines.append("\tgrantid: Schema.Types.ObjectId,\n")
 	lines.append("\tuserid: Schema.Types.ObjectId,\n")
