@@ -635,17 +635,38 @@ app.get("/object/:id?", ensureAuthenticated, function(req, res, next) {
       console.log("Some kind of error fetching user", err);
       res.sendStatus(400, err);
     }
-    if (req.query.list) {
+    if (req.query.list && req.query.global) {
       console.log("for list", req.user._id);
-      Obj.find({ userid: req.user._id }, function(err, list) {
-        console.log("/object list", list);
-        if (err) {
-          console.log("Some kind of error fetching Ppl List", err);
-          res.sendStatus(400, err);
-        }
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).send(list);
-      });
+      // Obj.find({ userid: req.user._id }, function(err, list) { // Old call just in case
+      Obj.find({ $or: [{ userid: req.user._id }, { global: true }] })
+        .sort({
+          global: -1 // Hopefully sorts?
+        })
+        .exec(function(err, list) {
+          console.log("/object list", list);
+          if (err) {
+            console.log("Some kind of error fetching Ppl List", err);
+            res.sendStatus(400, err);
+          }
+          res.setHeader("Content-Type", "application/json");
+          res.status(200).send(list);
+        });
+    } else if (req.query.list) {
+      console.log("for list", req.user._id);
+      // Obj.find({ userid: req.user._id }, function(err, list) { // Old call just in case
+      Obj.find({ userid: req.user._id })
+        .sort({
+          global: 1 // Hopefully sorts?
+        })
+        .exec(function(err, list) {
+          console.log("/object list", list);
+          if (err) {
+            console.log("Some kind of error fetching Ppl List", err);
+            res.sendStatus(400, err);
+          }
+          res.setHeader("Content-Type", "application/json");
+          res.status(200).send(list);
+        });
     } else {
       Obj.findById(req.query.id, function(err, o) {
         console.log("/object object", o);

@@ -136,7 +136,7 @@ var bs = {
           role.save(function(err, r) {
             var template = new Obj({
               userid: null,
-              name: "Template: " + b[i].title,
+              name: "Template: " + r.title,
               title: r.id,
               salary: r.salary,
               global: true
