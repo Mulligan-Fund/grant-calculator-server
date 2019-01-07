@@ -145,7 +145,7 @@ function sendEmail(email, link, cb) {
     from: "no-reply@netgrant.org",
     subject: "Forgot your password?",
     text:
-      "Hey, did you forgot your password? Click this link to reset it: " + link,
+      "Hey, did you forget your password? Click this link to reset it: " + link,
     html:
       '<strong>Hey guys</strong><br><p>Hey, did you forgot your password? Click this link to reset it</p><br><a href="' +
       link +
