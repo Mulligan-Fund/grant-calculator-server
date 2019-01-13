@@ -10,7 +10,8 @@ var bs = {
     },
     {
       title: "Chief Executive Officer (Nonprofit)",
-      salary: 103000
+      salary: 103000,
+      template: true
     },
     {
       title: "Chief Executive Officer/President (Foundation)",
@@ -22,7 +23,8 @@ var bs = {
     },
     {
       title: "Development Associate (Nonprofit)",
-      salary: 40428
+      salary: 40428,
+      template: true
     },
     {
       title: "Director; Communications (Foundation)",
@@ -34,7 +36,8 @@ var bs = {
     },
     {
       title: "Director; Development (Nonprofit)",
-      salary: 68305
+      salary: 68305,
+      template: true
     },
     {
       title: "Director; Donor Services/Donor Service Officer (Foundation)",
@@ -42,7 +45,8 @@ var bs = {
     },
     {
       title: "Director; Finance (Nonprofit)",
-      salary: 76561
+      salary: 76561,
+      template: true
     },
     {
       title: "Director; Research (Nonprofit)",
@@ -94,7 +98,8 @@ var bs = {
     },
     {
       title: "Program Director (Nonprofit)",
-      salary: 59014
+      salary: 59014,
+      template: true
     },
     {
       title: "Program Manager (Nonprofit)",
@@ -132,17 +137,26 @@ var bs = {
         console.log("Bootstrapping", b.length, "Roles");
         for (var i in b) {
           console.log("Adding Role:", b[i]);
+          var newrole = b[i];
+          var toTemplate = newrole.template ? true : false;
+          delete newrole.template;
           var role = new Role(b[i]);
-          role.save(function(err, r) {
-            var template = new Obj({
-              userid: null,
-              name: "Template: " + r.title,
-              title: r.id,
-              salary: r.salary,
-              global: true
+          // This is only here to fight a race
+          if (toTemplate) {
+            role.save(function(err, r) {
+              console.log("Adding Template:", r);
+              var template = new Obj({
+                userid: null,
+                name: "eg: " + r.title,
+                title: r.id,
+                salary: r.salary,
+                global: true
+              });
+              template.save();
             });
-            template.save();
-          });
+          } else {
+            role.save();
+          }
         }
         return;
       } else {
