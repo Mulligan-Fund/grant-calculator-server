@@ -224,10 +224,10 @@ app.post("/forgot/:username", async function(req, res, next) {
     var pathToToken =
       String(
         heroku
-          ? "https://mulligan-fund.github.io"
+          ? "https://mulligan-fund.github.io/grant-calculator"
           : "http://127.0.0.1:4000/grant-calculator"
       ) +
-      "/reset/?token=" +
+      "/reset?token=" +
       token;
     sendEmail(username, pathToToken, function(err, status) {
       if (err) res.status(500).json("error:" + err);
@@ -656,7 +656,7 @@ app.get("/object/:id?", ensureAuthenticated, function(req, res, next) {
       // Obj.find({ userid: req.user._id }, function(err, list) { // Old call just in case
       Obj.find({ userid: req.user._id })
         .sort({
-          global: 1 // Hopefully sorts?
+          global: -1 // Hopefully sorts?
         })
         .exec(function(err, list) {
           console.log("/object list", list);
