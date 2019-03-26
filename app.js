@@ -23,6 +23,7 @@ var heroku = process.env.HEROKU_TRUE || false;
 var corsOrigins = [
   "http://127.0.0.1:4000",
   "http://localhost:4000",
+  "https://netgrant.org",
   "https://mulligan-fund.github.io",
   "https://grantcalc.herokuapp.com"
 ];
@@ -38,7 +39,7 @@ app.set("view engine", "jade");
 app.use(function(req, res, next) {
   res.header(
     "Access-Control-Allow-Origin",
-    heroku ? "https://mulligan-fund.github.io" : "http://127.0.0.1:4000"
+    heroku ? "https://netgrant.org" : "http://127.0.0.1:4000"
   );
   next();
 });
@@ -224,7 +225,7 @@ app.post("/forgot/:username", async function(req, res, next) {
     var pathToToken =
       String(
         heroku
-          ? "https://mulligan-fund.github.io/grant-calculator"
+          ? "https://netgrant.org"
           : "http://127.0.0.1:4000/grant-calculator"
       ) +
       "/reset?token=" +
