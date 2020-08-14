@@ -189,9 +189,11 @@ app.get("/", function (req, res) {
 // Authenticate
 app.put("/auth", passport.authenticate("local"), function (req, res) {
   console.log("Punted through");
-  res.setHeader("Content-Type", "application/json");
-  // res.setHeader("Content-Length", "0"); // Safari fix that seems... dubious.
-  res.status(202).send(JSON.stringify("./list"));
+  req.session.save(() => {
+    res.setHeader("Content-Type", "application/json");
+    // res.setHeader("Content-Length", "0"); // Safari fix that seems... dubious.
+    res.status(202).send(JSON.stringify("./list"));
+  });
 });
 
 // Check if authenticated
