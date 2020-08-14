@@ -25,18 +25,18 @@ var corsOrigins = [
   "http://localhost:4000",
   "https://netgrant.org",
   "https://mulligan-fund.github.io",
-  "https://grantcalc.herokuapp.com"
+  "https://grantcalc.herokuapp.com",
 ];
 var corsSettings = cors({
   credentials: true,
   preflightContinue: true,
   allowedHeaders:
     "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-  origin: corsOrigins
+  origin: corsOrigins,
 });
 
 app.set("view engine", "jade");
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header(
     "Access-Control-Allow-Origin",
     heroku ? "https://netgrant.org" : "http://127.0.0.1:4000"
@@ -49,7 +49,7 @@ app.use(bodyParser());
 app.use(
   sessions({
     secret: "wowfoundations",
-    cookie: { secure: false, httpOnly: false }
+    cookie: { secure: false, httpOnly: false, sameSite: "strict" },
   })
 );
 app.use(passport.initialize());
@@ -69,14 +69,14 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/grantcalc"); //
 var bs = require("./helpers/bootstrap.js"); // Bootstraps database
 bs.init(mongoose, Role, Obj);
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   console.log("serializeUser");
   console.log(user);
   done(null, user._id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
     done(err, user);
   });
 });
@@ -87,11 +87,11 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "username",
-      passwordField: "password"
+      passwordField: "password",
     },
-    function(username, password, done) {
+    function (username, password, done) {
       console.log("Looking for", username, password);
-      User.findOne({ username: username.toLowerCase() }, function(err, user) {
+      User.findOne({ username: username.toLowerCase() }, function (err, user) {
         console.log("Looking for user", user, err);
 
         if (err) {
@@ -103,9 +103,9 @@ passport.use(
           console.log("Making user");
           usr = new User({
             username: username.toLowerCase(),
-            password: password.toLowerCase()
+            password: password.toLowerCase(),
           });
-          usr.save(function(err) {
+          usr.save(function (err) {
             if (err) {
               console.log(err);
             } else {
@@ -120,7 +120,7 @@ passport.use(
             done(null, user);
           } else {
             return done(null, false, {
-              message: "Invalid password"
+              message: "Invalid password",
             });
           }
         }
@@ -150,7 +150,7 @@ function sendEmail(email, link, cb) {
     html:
       '<strong>Hey guys</strong><br><p>Hey, did you forgot your password? Click this link to reset it</p><br><a href="' +
       link +
-      '">Click this link</a>'
+      '">Click this link</a>',
   };
 
   postmarkClient.sendEmail(
@@ -158,7 +158,7 @@ function sendEmail(email, link, cb) {
       From: "info@stupidsystems.com",
       To: msg.to,
       Subject: msg.subject,
-      TextBody: msg.text
+      TextBody: msg.text,
     },
     cb
   );
@@ -168,17 +168,17 @@ app.options(
   "*",
   cors({
     credentials: true,
-    origin: corsOrigins
+    origin: corsOrigins,
   })
 ); // Setup CORS option
 
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify("No Login"));
 });
 
 // Authenticate
-app.put("/auth", passport.authenticate("local"), function(req, res) {
+app.put("/auth", passport.authenticate("local"), function (req, res) {
   console.log("Punted through");
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Content-Length", "0"); // Safari fix that seems... dubious.
@@ -186,25 +186,25 @@ app.put("/auth", passport.authenticate("local"), function(req, res) {
 });
 
 // Check if authenticated
-app.get("/auth", ensureAuthenticated, function(req, res, next) {
+app.get("/auth", ensureAuthenticated, function (req, res, next) {
   res.setHeader("Content-Type", "application/json");
   res.status(200).send(JSON.stringify(req.user));
 });
 
 // Main index
-app.put("/", ensureAuthenticated, function(req, res, next) {
+app.put("/", ensureAuthenticated, function (req, res, next) {
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify("Logged in"));
 });
 
-app.get("/logout", function(req, res) {
+app.get("/logout", function (req, res) {
   req.logout();
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify("Logout"));
 });
 
 // Get Reset token
-app.post("/forgot/:username", async function(req, res, next) {
+app.post("/forgot/:username", async function (req, res, next) {
   console.log("Running Forgot", req.params.username);
   try {
     var buf = await crypto.randomBytes(20);
@@ -214,9 +214,7 @@ app.post("/forgot/:username", async function(req, res, next) {
       { username },
       {
         resetPasswordToken: token,
-        resetPasswordExpires: moment()
-          .add(1, "hour")
-          .toDate()
+        resetPasswordExpires: moment().add(1, "hour").toDate(),
       }
     );
     if (!user) {
@@ -230,7 +228,7 @@ app.post("/forgot/:username", async function(req, res, next) {
       ) +
       "/reset?token=" +
       token;
-    sendEmail(username, pathToToken, function(err, status) {
+    sendEmail(username, pathToToken, function (err, status) {
       if (err) res.status(500).json("error:" + err);
       else res.status(200).json(pathToToken);
     });
@@ -241,7 +239,7 @@ app.post("/forgot/:username", async function(req, res, next) {
 });
 
 // Reset the actual thing
-app.post("/reset/:token", async function(req, res, next) {
+app.post("/reset/:token", async function (req, res, next) {
   console.log("Running Reset", req.params.token, req.query.password);
   try {
     var resetPasswordToken = req.params.token;
@@ -249,11 +247,11 @@ app.post("/reset/:token", async function(req, res, next) {
     var user = await User.findOneAndUpdate(
       {
         resetPasswordToken,
-        resetPasswordExpires: { $gt: Date.now() }
+        resetPasswordExpires: { $gt: Date.now() },
       },
       {
         resetPasswordToken: undefined,
-        resetPasswordExpires: undefined
+        resetPasswordExpires: undefined,
       }
     );
     // if (!user) {
@@ -267,7 +265,7 @@ app.post("/reset/:token", async function(req, res, next) {
     // 	}
     // user.password =
     user.set({
-      password: password.toLowerCase()
+      password: password.toLowerCase(),
     });
     user.markModified("password");
     user.save((err, user) => {
@@ -305,19 +303,19 @@ app.post("/reset/:token", async function(req, res, next) {
 //////////////////////////////////
 ////////////// USER //////////////
 //////////////////////////////////
-app.get("/user", ensureAuthenticated, function(req, res, next) {
+app.get("/user", ensureAuthenticated, function (req, res, next) {
   // Get User info here
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify("User info should return"));
 });
 
-app.put("/user", ensureAuthenticated, function(req, res, next) {
+app.put("/user", ensureAuthenticated, function (req, res, next) {
   console.log("Updating user", req.query);
   User.findOneAndUpdate(
     { id: req.user.id },
     update(),
     { upsert: true },
-    function(err, user) {
+    function (err, user) {
       if (err) {
         console.log("user update fail :(", err);
         res.sendStatus(500);
@@ -333,7 +331,7 @@ app.put("/user", ensureAuthenticated, function(req, res, next) {
 /////////////  Grants  ////////////////
 //////////////////////////////////////
 
-app.get("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
+app.get("/g/:type/:id?", ensureAuthenticated, function (req, res, next) {
   var items = [];
   var model = {};
   if (req.params.type == "maker") {
@@ -341,13 +339,13 @@ app.get("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
   } else {
     model = schema;
   }
-  User.findById(req.user._id, function(err, user) {
+  User.findById(req.user._id, function (err, user) {
     if (err) {
       console.log("Some kind of error fetching user", err);
       res.sendStatus(400, err);
     }
     if (req.query.list) {
-      model.find({ userid: req.user._id }, function(err, list) {
+      model.find({ userid: req.user._id }, function (err, list) {
         console.log("/maker list", list);
         if (err) {
           console.log("Some kind of error fetching maker", err);
@@ -357,7 +355,7 @@ app.get("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
         res.status(200).send(list);
       });
     } else {
-      model.findById(req.query.id, function(err, grant) {
+      model.findById(req.query.id, function (err, grant) {
         console.log("/maker grant", grant);
         if (err) {
           console.log("Some kind of error fetching grant", err);
@@ -370,7 +368,7 @@ app.get("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
   });
 });
 
-app.put("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
+app.put("/g/:type/:id?", ensureAuthenticated, function (req, res, next) {
   var items = [];
   var model = {};
   if (req.params.type == "maker") {
@@ -386,13 +384,13 @@ app.put("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
     for (var i in req.body) {
       grant[i] = req.body[i];
     }
-    grant.save(function(err, grant) {
+    grant.save(function (err, grant) {
       if (err) console.log("Error creating maker", err, grant);
       res.setHeader("Content-Type", "application/json");
       res.status(200).send(grant);
     });
   } else {
-    User.findById(req.user._id, function(err, user) {
+    User.findById(req.user._id, function (err, user) {
       console.log("/maker user", user);
       if (err) {
         console.log("Some kind of error fetching pins", err);
@@ -403,14 +401,14 @@ app.put("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
         res.sendStatus(400, err);
       } else {
         console.log("Attempt to insert", req.body);
-        model.findById(req.body._id, { lean: true }, function(err, grant) {
+        model.findById(req.body._id, { lean: true }, function (err, grant) {
           if (err) console.log("Updated form", err, grant);
           grant.set(req.body);
           for (var i = 0; i < grant.length; i++) {
             console.log("mod", grant[i].isArray(), grant[i].key);
             if (grant[i].isArray()) grant.markModified(grant[i].key);
           }
-          grant.save(function() {
+          grant.save(function () {
             res.setHeader("Content-Type", "application/json");
             res.send(JSON.stringify(grant));
           });
@@ -420,14 +418,14 @@ app.put("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
   }
 });
 
-app.delete("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
+app.delete("/g/:type/:id?", ensureAuthenticated, function (req, res, next) {
   var model = {};
   if (req.params.type == "maker") {
     model = maker;
   } else {
     model = schema;
   }
-  User.findById(req.user._id, function(err, user) {
+  User.findById(req.user._id, function (err, user) {
     console.log("DEL /grant user", user);
     if (err) {
       console.log("Some kind of error fetching pins", err);
@@ -438,7 +436,7 @@ app.delete("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
       res.sendStatus(400, err);
     } else {
       console.log("Searching to DEL grant", req.body.id);
-      model.findById(req.body.id).remove(function(err, o) {
+      model.findById(req.body.id).remove(function (err, o) {
         if (err) console.log("Err Updated obj", err);
         console.log("DEL /object", o);
         res.setHeader("Content-Type", "application/json");
@@ -452,7 +450,7 @@ app.delete("/g/:type/:id?", ensureAuthenticated, function(req, res, next) {
 /////////////  Template  /////////////
 //////////////////////////////////////
 
-app.get("/template/:type", ensureAuthenticated, function(req, res, next) {
+app.get("/template/:type", ensureAuthenticated, function (req, res, next) {
   var items = [];
   var model = {};
   if (req.params.type == "maker") {
@@ -460,16 +458,16 @@ app.get("/template/:type", ensureAuthenticated, function(req, res, next) {
   } else {
     model = schema;
   }
-  User.findById(req.user._id, function(err, user) {
+  User.findById(req.user._id, function (err, user) {
     if (err) {
       console.log("Some kind of error fetching user", err);
       res.sendStatus(400, err);
     }
     console.log("Template search:", req.params.type);
     // Fetch local
-    model.find({ userid: req.user._id, template: true }, function(err, list) {
+    model.find({ userid: req.user._id, template: true }, function (err, list) {
       //also fetch global
-      model.find({ globaltemplate: true }, function(err, globallist) {
+      model.find({ globaltemplate: true }, function (err, globallist) {
         console.log("/template/maker/user", list);
         console.log("/template/maker/global", globallist);
         if (err) {
@@ -484,7 +482,7 @@ app.get("/template/:type", ensureAuthenticated, function(req, res, next) {
   });
 });
 
-app.get("/template/:type/:id?", ensureAuthenticated, function(req, res, next) {
+app.get("/template/:type/:id?", ensureAuthenticated, function (req, res, next) {
   var model = {};
   if (req.params.type == "maker") {
     model = maker;
@@ -492,7 +490,7 @@ app.get("/template/:type/:id?", ensureAuthenticated, function(req, res, next) {
     model = schema;
   }
   var items = [];
-  User.findById(req.user._id, function(err, user) {
+  User.findById(req.user._id, function (err, user) {
     if (err) {
       console.log("Some kind of error fetching user", err);
       res.sendStatus(400, err);
@@ -500,7 +498,7 @@ app.get("/template/:type/:id?", ensureAuthenticated, function(req, res, next) {
 
     // Get Individual and merge
     if (req.query.type == "maker") {
-      model.findById(req.query.id, function(err, obj) {
+      model.findById(req.query.id, function (err, obj) {
         console.log("/template/maker", obj);
         if (err) {
           console.log("Some kind of error fetching template maker", err);
@@ -517,15 +515,15 @@ app.get("/template/:type/:id?", ensureAuthenticated, function(req, res, next) {
 /////////////  OrgInfo  //////////////
 //////////////////////////////////////
 
-app.get("/org/:id?", ensureAuthenticated, function(req, res, next) {
+app.get("/org/:id?", ensureAuthenticated, function (req, res, next) {
   var items = [];
-  User.findById(req.user._id, function(err, user) {
+  User.findById(req.user._id, function (err, user) {
     if (err) {
       console.log("Some kind of error fetching user", err);
       res.sendStatus(400, err);
     }
     if (req.query.list) {
-      profile.find({ userid: req.user._id }, function(err, list) {
+      profile.find({ userid: req.user._id }, function (err, list) {
         console.log("/org list", list);
         if (err) {
           console.log("Some kind of error fetching org", err);
@@ -535,7 +533,7 @@ app.get("/org/:id?", ensureAuthenticated, function(req, res, next) {
         res.status(200).send(list);
       });
     } else {
-      profile.findById(req.query.id, function(err, grant) {
+      profile.findById(req.query.id, function (err, grant) {
         console.log("/org grant", grant);
         if (err) {
           console.log("Some kind of error fetching grant", err);
@@ -548,7 +546,7 @@ app.get("/org/:id?", ensureAuthenticated, function(req, res, next) {
   });
 });
 
-app.put("/org/:id?", ensureAuthenticated, function(req, res, next) {
+app.put("/org/:id?", ensureAuthenticated, function (req, res, next) {
   var items = [];
   // Is this a new grant?
   if (req.body._id == null) {
@@ -558,13 +556,13 @@ app.put("/org/:id?", ensureAuthenticated, function(req, res, next) {
     for (var i in req.body) {
       org[i] = req.body[i];
     }
-    org.save(function(err, o) {
+    org.save(function (err, o) {
       if (err) console.log("Error creating org", err, o);
       res.setHeader("Content-Type", "application/json");
       res.status(200).send(o);
     });
   } else {
-    User.findById(req.user._id, function(err, user) {
+    User.findById(req.user._id, function (err, user) {
       console.log("/org user", user);
       if (err) {
         console.log("Some kind of error fetching pins", err);
@@ -579,7 +577,7 @@ app.put("/org/:id?", ensureAuthenticated, function(req, res, next) {
           req.body._id,
           req.body,
           { upsert: true, new: true },
-          function(err, grant) {
+          function (err, grant) {
             if (err) console.log("Err Updated orginfo", err, grant);
             res.setHeader("Content-Type", "application/json");
             res.send(JSON.stringify(grant));
@@ -591,8 +589,8 @@ app.put("/org/:id?", ensureAuthenticated, function(req, res, next) {
 });
 
 // Note, this should prob not be used
-app.delete("/org/:id?", ensureAuthenticated, function(req, res, next) {
-  User.findById(req.user._id, function(err, user) {
+app.delete("/org/:id?", ensureAuthenticated, function (req, res, next) {
+  User.findById(req.user._id, function (err, user) {
     console.log("DEL /grant user", user);
     if (err) {
       console.log("Some kind of error fetching pins", err);
@@ -603,7 +601,7 @@ app.delete("/org/:id?", ensureAuthenticated, function(req, res, next) {
       res.sendStatus(400, err);
     } else {
       console.log("Searching to DEL grant", req.body.id);
-      profile.findById(req.body.id).remove(function(err, o) {
+      profile.findById(req.body.id).remove(function (err, o) {
         if (err) console.log("Err Updated obj", err);
         console.log("DEL /object", o);
         res.setHeader("Content-Type", "application/json");
@@ -617,9 +615,9 @@ app.delete("/org/:id?", ensureAuthenticated, function(req, res, next) {
 /////////////  Items  ////////////////
 //////////////////////////////////////
 
-app.get("/role/:id?", ensureAuthenticated, function(req, res, next) {
+app.get("/role/:id?", ensureAuthenticated, function (req, res, next) {
   var items = [];
-  Role.find({}, function(err, list) {
+  Role.find({}, function (err, list) {
     if (err) {
       console.log("Some kind of error fetching roles", err);
       res.sendStatus(400, err);
@@ -629,9 +627,9 @@ app.get("/role/:id?", ensureAuthenticated, function(req, res, next) {
   });
 });
 
-app.get("/object/:id?", ensureAuthenticated, function(req, res, next) {
+app.get("/object/:id?", ensureAuthenticated, function (req, res, next) {
   var items = [];
-  User.findById(req.user._id, function(err, user) {
+  User.findById(req.user._id, function (err, user) {
     if (err) {
       console.log("Some kind of error fetching user", err);
       res.sendStatus(400, err);
@@ -641,9 +639,9 @@ app.get("/object/:id?", ensureAuthenticated, function(req, res, next) {
       // Obj.find({ userid: req.user._id }, function(err, list) { // Old call just in case
       Obj.find({ $or: [{ userid: req.user._id }, { global: true }] })
         .sort({
-          global: -1 // Hopefully sorts?
+          global: -1, // Hopefully sorts?
         })
-        .exec(function(err, list) {
+        .exec(function (err, list) {
           console.log("/object list", list);
           if (err) {
             console.log("Some kind of error fetching Ppl List", err);
@@ -657,9 +655,9 @@ app.get("/object/:id?", ensureAuthenticated, function(req, res, next) {
       // Obj.find({ userid: req.user._id }, function(err, list) { // Old call just in case
       Obj.find({ userid: req.user._id })
         .sort({
-          global: -1 // Hopefully sorts?
+          global: -1, // Hopefully sorts?
         })
-        .exec(function(err, list) {
+        .exec(function (err, list) {
           console.log("/object list", list);
           if (err) {
             console.log("Some kind of error fetching Ppl List", err);
@@ -669,7 +667,7 @@ app.get("/object/:id?", ensureAuthenticated, function(req, res, next) {
           res.status(200).send(list);
         });
     } else {
-      Obj.findById(req.query.id, function(err, o) {
+      Obj.findById(req.query.id, function (err, o) {
         console.log("/object object", o);
         if (err) {
           console.log("Some kind of error fetching object", err);
@@ -682,7 +680,7 @@ app.get("/object/:id?", ensureAuthenticated, function(req, res, next) {
   });
 });
 
-app.put("/object/:id?", ensureAuthenticated, function(req, res, next) {
+app.put("/object/:id?", ensureAuthenticated, function (req, res, next) {
   var items = [];
   console.log("req.user for /object", req.user, req.body);
 
@@ -695,13 +693,13 @@ app.put("/object/:id?", ensureAuthenticated, function(req, res, next) {
       if (i !== "_id") object[i] = req.body[i];
     }
     // if(typeof object['_id'] !== 'undefined') delete object['_id']
-    object.save(function(err, o) {
+    object.save(function (err, o) {
       if (err) console.log("Error creating grant", err, o);
       res.setHeader("Content-Type", "application/json");
       res.status(200).send(o);
     });
   } else {
-    User.findById(req.user._id, function(err, user) {
+    User.findById(req.user._id, function (err, user) {
       console.log("/object user", user);
       if (err) {
         console.log("Some kind of error fetching pins", err);
@@ -715,7 +713,7 @@ app.put("/object/:id?", ensureAuthenticated, function(req, res, next) {
           req.body._id,
           req.body,
           { upsert: true, new: true },
-          function(err, o) {
+          function (err, o) {
             if (err) console.log("Err Updated obj", err);
             res.setHeader("Content-Type", "application/json");
             res.send(JSON.stringify(o));
@@ -726,8 +724,8 @@ app.put("/object/:id?", ensureAuthenticated, function(req, res, next) {
   }
 });
 
-app.delete("/object/:id?", ensureAuthenticated, function(req, res, next) {
-  User.findById(req.user._id, function(err, user) {
+app.delete("/object/:id?", ensureAuthenticated, function (req, res, next) {
+  User.findById(req.user._id, function (err, user) {
     console.log("DEL /object user", user);
     if (err) {
       console.log("Some kind of error fetching pins", err);
@@ -738,7 +736,7 @@ app.delete("/object/:id?", ensureAuthenticated, function(req, res, next) {
       res.sendStatus(400, err);
     } else {
       console.log("Searching to DEL obj", req.body.id);
-      Obj.findById(req.body.id).remove(function(err, o) {
+      Obj.findById(req.body.id).remove(function (err, o) {
         if (err) console.log("Err Updated obj", err);
         console.log("DEL /object", o);
         res.setHeader("Content-Type", "application/json");
@@ -751,9 +749,9 @@ app.delete("/object/:id?", ensureAuthenticated, function(req, res, next) {
 ///////////////////
 /// Admin functions
 ///////////////////
-app.get("/admin/users", ensureAuthenticated, function(req, res, next) {
+app.get("/admin/users", ensureAuthenticated, function (req, res, next) {
   var items = [];
-  User.findById(req.user._id, function(err, user) {
+  User.findById(req.user._id, function (err, user) {
     if (err) {
       console.log("Some kind of error fetching user", err);
       res.sendStatus(400, err);
@@ -768,27 +766,27 @@ app.get("/admin/users", ensureAuthenticated, function(req, res, next) {
               from: "profiles",
               localField: "_id",
               foreignField: "userid",
-              as: "user_profiles"
-            }
+              as: "user_profiles",
+            },
           },
           {
             $lookup: {
               from: "grants",
               localField: "_id",
               foreignField: "userid",
-              as: "seeker"
-            }
+              as: "seeker",
+            },
           },
           {
             $lookup: {
               from: "makers",
               localField: "_id",
               foreignField: "userid",
-              as: "maker"
-            }
-          }
+              as: "maker",
+            },
+          },
         ],
-        function(err, list) {
+        function (err, list) {
           if (err) {
             console.log("Some kind of error fetching roles", err);
             res.sendStatus(400, err);
