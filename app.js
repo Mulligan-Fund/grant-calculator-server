@@ -49,7 +49,12 @@ app.use(bodyParser());
 app.use(
   sessions({
     secret: "wowfoundations",
-    cookie: { secure: false, httpOnly: false, sameSite: "strict" },
+    cookie: {
+      secure: true,
+      httpOnly: false,
+      expires: false,
+      sameSite: "strict",
+    },
   })
 );
 app.use(passport.initialize());
