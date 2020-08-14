@@ -135,6 +135,7 @@ passport.use(
 );
 
 function ensureAuthenticated(req, res, next) {
+  console.log("Ensure Auth", req);
   if (req.isAuthenticated()) {
     console.log("Authenticated");
     return next();
