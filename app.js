@@ -136,15 +136,16 @@ passport.use(
 
 function ensureAuthenticated(req, res, next) {
   console.log("Ensure Auth", req);
-  setTimeout(250);
-  if (req.isAuthenticated()) {
-    console.log("Authenticated");
-    return next();
-  } else {
-    console.log("Not Authenticated");
-    res.setHeader("Content-Type", "application/json");
-    res.status(401).send(JSON.stringify("Not Logged In"));
-  }
+  setTimeout(function () {
+    if (req.isAuthenticated()) {
+      console.log("Authenticated");
+      return next();
+    } else {
+      console.log("Not Authenticated");
+      res.setHeader("Content-Type", "application/json");
+      res.status(401).send(JSON.stringify("Not Logged In"));
+    }
+  }, 250);
 }
 
 function sendEmail(email, link, cb) {
