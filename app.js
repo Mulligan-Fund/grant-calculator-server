@@ -136,10 +136,12 @@ passport.use(
 
 function ensureAuthenticated(req, res, next) {
   console.log("Ensure Auth", req.session);
-  let auth = true;
+  let auth = null;
   setTimeout(function () {
     auth = req.isAuthenticated();
   }, 250);
+
+  console.log("is auth", auth);
 
   if (auth) {
     console.log("Authenticated");
