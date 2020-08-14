@@ -146,7 +146,7 @@ function ensureAuthenticated(req, res, next) {
       res.setHeader("Content-Type", "application/json");
       res.status(401).send(JSON.stringify("Not Logged In"));
     }
-  }, 250);
+  }, 1000);
 }
 
 function sendEmail(email, link, cb) {
@@ -191,15 +191,17 @@ app.put("/auth", passport.authenticate("local"), function (req, res) {
   console.log("Punted through");
   req.session.save(() => {
     res.setHeader("Content-Type", "application/json");
-    // res.setHeader("Content-Length", "0"); // Safari fix that seems... dubious.
+    res.setHeader("Content-Length", "0"); // Safari fix that seems... dubious.
     res.status(202).send(JSON.stringify("./list"));
   });
 });
 
 // Check if authenticated
 app.get("/auth", ensureAuthenticated, function (req, res, next) {
-  res.setHeader("Content-Type", "application/json");
-  res.status(200).send(JSON.stringify(req.user));
+  req.session.save(() => {
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).send(JSON.stringify(req.user));
+  });
 });
 
 // Main index
